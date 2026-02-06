@@ -16,10 +16,12 @@
 body,
 html {
   width: 100%;
-  height: 100%;
+  padding: 0;
+  margin: 0;
   background-color: var(--bg-color);
   font-family: var(--font-family);
-  /* overflow: hidden removed to allow scrolling */
+  overflow-x: hidden;
+  /* Prevent horizontal scroll globally */
 }
 
 .hero-container {
@@ -221,12 +223,11 @@ html {
 /* Statement Section */
 .statement-section {
   width: 100%;
-  height: 50vh;
+  padding: 120px 80px;
   background-color: var(--bg-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 80px;
   position: relative;
   z-index: 5;
   text-align: center;
@@ -257,6 +258,7 @@ html {
   z-index: 3;
   /* Above the blur bridge (z-index: 1) and blue bridge (z-index: 1) */
   width: 100%;
+
 }
 
 .statement-content h2 {
@@ -265,22 +267,22 @@ html {
   line-height: 1.05;
   color: var(--text-color);
   max-width: 1200px;
-  margin: 0 auto;
+  margin: 0 auto 140px auto;
   letter-spacing: -0.04em;
 }
 
 /* Development Branding Section */
 .development-branding-section {
   width: 100%;
-  padding: 100px 0;
+  padding: 150px 0;
   background-color: var(--bg-color);
   overflow: hidden;
   position: relative;
-  z-index: 2;
+  z-index: 5;
   display: flex;
   flex-direction: column;
-  gap: 80px;
-  /* Airy gap between divider and carousel */
+  gap: 120px;
+  /* Increased from 80px for better wavy motion clearance */
 }
 
 .divider-row {
@@ -319,9 +321,15 @@ html {
 
 .local-carousel-track {
   display: flex;
-  width: calc(280px * 20);
-  animation: scroll-local 40s linear infinite;
+  width: calc(280px * 24);
+  /* Updated for 12 items * 2 = 24 */
+  min-height: 120px;
+  /* Provides ample room for 72px logos + ±15px wave */
+  animation: scroll-local 44s linear infinite;
+  /* Slightly slowed for the larger set */
   align-items: center;
+  overflow: visible;
+  /* Ensure wavy motion isn't clipped by the track itself */
 }
 
 .local-carousel-track .logo-item {
@@ -363,13 +371,19 @@ html {
   display: block;
 }
 
+/* Targeted sizing for Vapi logo to match visual weight */
+.local-carousel-track .logo-item img[src*="vapi"] {
+  height: 72px;
+}
+
 @keyframes scroll-local {
   0% {
     transform: translateX(0);
   }
 
   100% {
-    transform: translateX(calc(-280px * 10));
+    transform: translateX(calc(-280px * 12));
+    /* Scroll through 12 items */
   }
 }
 
@@ -383,99 +397,234 @@ html {
   }
 }
 
-/* Logo Carousel Section */
-.logo-carousel-section {
-  width: 100%;
-  padding: 80px 0;
-  background-color: var(--bg-color);
-  overflow: hidden;
+/* Logo Carousel Removal (Legacy styles removed to prevent conflicts) */
+
+/* Our Process Section (Engineered Walkthrough Redesign) */
+.process-walkthrough-section {
   position: relative;
-  z-index: 2;
+  width: 100%;
+  padding: 15vw 0;
+  background-color: var(--bg-color);
+  /* Technical Blueprint Grid */
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  overflow: clip;
+  /* Strictly contain visuals to this section */
+  z-index: 5;
 }
 
-.carousel-track {
-  display: flex;
-  width: calc(250px * 14);
-  /* 250px per item * 14 items (7 original + 7 duplicate) */
-  animation: scroll 35s linear infinite;
-  align-items: center;
+.section-header {
+  max-width: 1200px;
+  margin: 0 auto 100px auto;
+  padding: 0 80px;
 }
 
-.logo-item {
-  width: 250px;
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: var(--accent-color);
+  margin-bottom: 20px;
+}
+
+.header-line {
+  width: 60px;
+  height: 2px;
+  background-color: var(--accent-color);
+}
+
+.walkthrough-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 80px;
+  display: grid;
+  grid-template-columns: 0.8fr 1.2fr;
+  gap: 120px;
+  position: relative;
+}
+
+.walkthrough-content {
+  position: relative;
+}
+
+.process-step {
+  min-height: 70vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding: 0 40px;
-  /* Wave motion: staggered animation for "floating" effect */
-  animation: wave 4s ease-in-out infinite alternate;
+  opacity: 0.15;
+  filter: blur(4px);
+  transform: translateX(-40px);
+  transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-/* Stagger wavy motion for each item */
-.logo-item:nth-child(odd) {
-  animation-delay: -1s;
+.process-step.active {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateX(0);
 }
 
-.logo-item:nth-child(3n) {
-  animation-delay: -2.5s;
+.step-meta {
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 24px;
 }
 
-.logo-item:nth-child(4n) {
-  animation-delay: -0.5s;
+.process-step h3 {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: var(--text-color);
+  line-height: 1;
 }
 
-.logo-item img {
-  height: 38px;
-  width: auto;
-  opacity: 0.75;
-  filter: grayscale(0.2);
-  /* Slightly muted but keeps colors */
-  transition: opacity 0.3s ease;
+.process-step p {
+  font-size: 18px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 440px;
 }
 
-@keyframes scroll {
-  0% {
-    transform: translateX(0);
-  }
-
-  100% {
-    transform: translateX(calc(-250px * 7));
-  }
+/* Right Column: Visual Core */
+.walkthrough-visual-area {
+  position: relative;
 }
 
-@keyframes wave {
-  0% {
-    transform: translateY(-6px);
-  }
-
-  100% {
-    transform: translateY(6px);
-  }
+.visual-core-container {
+  position: sticky;
+  top: 15vh;
+  width: 100%;
+  height: 70vh;
+  background: radial-gradient(circle at center, rgba(255, 90, 95, 0.05) 0%, transparent 75%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
 }
 
-/* Accessibility: Reduce motion */
-@media (prefers-reduced-motion: reduce) {
+#visual-core-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
-  .carousel-track,
-  .logo-item {
-    animation: none;
-  }
+.ambient-metadata {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  font-family: 'monospace';
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
-  .carousel-track {
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
+.meta-item {
+  letter-spacing: 0.1em;
+}
+
+#visual-state-label {
+  color: var(--accent-color);
+}
+
+.corner-accents .accent {
+  position: absolute;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.2);
+  line-height: 1;
+}
+
+.accent.tl {
+  top: 15px;
+  left: 15px;
+}
+
+.accent.tr {
+  top: 15px;
+  right: 15px;
+}
+
+.accent.bl {
+  bottom: 15px;
+  left: 15px;
+}
+
+.accent.br {
+  bottom: 15px;
+  right: 15px;
+}
+
+@media (max-width: 992px) {
+  .walkthrough-container {
+    grid-template-columns: 1fr;
     gap: 40px;
   }
 
-  .logo-item {
-    width: auto;
-    padding: 20px;
+  .walkthrough-visual-area {
+    grid-row: 1;
+    height: 400px;
+  }
+
+  .visual-core-container {
+    position: relative;
+    top: 0;
+    height: 400px;
+  }
+
+  .process-step {
+    min-height: 60vh;
   }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
+  .process-walkthrough-section {
+    padding: 100px 0;
+  }
+
+  .walkthrough-container {
+    padding: 0 30px;
+    grid-template-columns: 1fr;
+    gap: 80px;
+  }
+
+  .walkthrough-visual-area {
+    grid-row: 1;
+    /* Visual above content for better mobile balance */
+    height: 350px;
+  }
+
+  .visual-core-container {
+    position: relative;
+    top: 0;
+    height: 100%;
+  }
+
+  .process-step {
+    min-height: auto;
+    padding: 60px 0;
+    opacity: 0.3;
+    transform: translateY(30px);
+  }
+
+  .process-step.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .process-step h3 {
+    font-size: clamp(2rem, 8vw, 2.8rem);
+  }
+
+  /* Responsive refinements */
   .glass-nav {
     top: 20px;
     padding: 10px 20px;
@@ -492,10 +641,12 @@ html {
 
   .hero-content {
     padding: 0 0 60px 40px;
+    bottom: 40px;
+    left: 40px;
   }
 
   .hero-content h1 {
-    font-size: 48px;
+    font-size: clamp(32px, 12vw, 48px);
   }
 
   #hero-video {
@@ -504,8 +655,8 @@ html {
   }
 
   .development-branding-section {
-    padding: 60px 0;
-    gap: 40px;
+    padding: 80px 0;
+    gap: 60px;
   }
 
   .local-carousel-track .logo-item {
@@ -514,11 +665,15 @@ html {
   }
 
   .local-carousel-track .logo-item img {
-    height: 48px;
-    /* Balanced larger mobile size */
+    height: 42px;
     width: auto;
-    max-width: 140px;
-    object-fit: contain;
+    max-width: 120px;
+  }
+
+  .local-carousel-track {
+    min-height: 140px;
+    /* Extra room for wave motion on mobile */
+    overflow: visible;
   }
 
   @keyframes scroll-local {
@@ -527,16 +682,20 @@ html {
     }
 
     100% {
-      transform: translateX(calc(-200px * 10));
+      transform: translateX(calc(-200px * 12));
     }
   }
 
   .statement-section {
-    padding: 0 30px;
-    height: 45vh;
+    padding: 100px 30px;
+    height: auto;
+    min-height: 50vh;
+    display: flex;
+    align-items: center;
   }
 
   .statement-content h2 {
-    font-size: clamp(3rem, 14vw, 5rem);
+    font-size: clamp(2.5rem, 12vw, 4.5rem);
+    margin-bottom: 0;
   }
 }
