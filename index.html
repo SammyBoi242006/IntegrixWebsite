@@ -16,14 +16,14 @@
 <body>
   <nav class="glass-nav">
     <div class="nav-links">
-      <a href="#">Home</a>
-      <a href="#">About Us</a>
-      <a href="#">Services</a>
+      <a href="#home">Home</a>
+      <a href="#who-we-are-section">About Us</a>
+      <a href="#process">Services</a>
       <a href="#">Contact</a>
     </div>
   </nav>
 
-  <div class="hero-container">
+  <div id="home" class="hero-container">
     <video autoplay loop muted playsinline preload="metadata" id="hero-video">
       <source src="assets/background_video_optimized.mp4" type="video/mp4">
       Your browser does not support the video tag.
@@ -102,6 +102,65 @@
     </div>
   </section>
 
+  <!-- Who We Are Section (Capability Cards Rebuild) -->
+  <section id="who-we-are-section" class="who-we-are-root">
+    <div class="who-we-are-container">
+      <header class="who-we-are-header">
+        <h2 class="who-we-are-title">Who we are</h2>
+        <p class="who-we-are-intro">Helping businesses scale by implementing AI systems that work</p>
+      </header>
+
+      <div class="who-we-are-main-grid">
+        <!-- Left: AI Core Pillar -->
+        <div class="who-we-are-pillar-zone">
+          <div class="who-we-are-pillar">
+            <div class="who-we-are-pillar-spine"></div>
+            <div class="who-we-are-pillar-node p1"></div>
+            <div class="who-we-are-pillar-node p2"></div>
+            <div class="who-we-are-pillar-node p3"></div>
+            <div class="who-we-are-pillar-signal s1"></div>
+            <div class="who-we-are-pillar-signal s2"></div>
+          </div>
+        </div>
+
+        <!-- Right: Capability Cards Stacked -->
+        <div class="who-we-are-stack">
+          <!-- Card 1 -->
+          <div class="who-we-are-card">
+            <div class="who-we-are-card-accent"></div>
+            <h3>AI Customer Support</h3>
+            <p>Implementing AI-driven support systems that handle real conversations and resolve complex queries with
+              technical depth.</p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="who-we-are-card">
+            <div class="who-we-are-card-accent"></div>
+            <h3>Inbound & Outbound AI Calling</h3>
+            <p>Deploying technical voice AI agents for specialized sales, support, and lead qualification with
+              human-grade resonance.</p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="who-we-are-card">
+            <div class="who-we-are-card-accent"></div>
+            <h3>AI Automation for Scale</h3>
+            <p>Architecting autonomous workflow layers that reduce manual overhead and allow your business to grow
+              operations horizontally.</p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="who-we-are-card who-we-are-upcoming">
+            <div class="who-we-are-card-accent"></div>
+            <div class="who-we-are-badge">Emerging Technology</div>
+            <h3>AI Video Ads</h3>
+            <p>Engineering scalable AI video systems that empower brands to generate high-fidelity ad content at speed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
 
@@ -160,9 +219,167 @@
         </div>
       </div>
     </div>
-  </section>
+    <!-- Our Services Section (AI Network with Detailed Content) -->
+    <section id="services-constellation-section" class="services-constellation-root">
+      <div class="services-constellation-container">
+        <header class="services-constellation-header">
+          <h2 class="services-constellation-title">Our Services</h2>
+        </header>
 
-  <script src="script.js"></script>
+        <div class="services-constellation-cloud">
+          <!-- SVG Network Layer (Backdrop) -->
+          <svg class="services-constellation-network" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+            <path class="services-constellation-line"
+              d="M300,200 L600,300 M600,300 L900,250 M600,300 L450,550 M300,200 L450,550 M900,250 L800,500 M450,550 L800,500" />
+          </svg>
+
+          <!-- Floating Nodes (Backdrop) -->
+          <div class="services-constellation-nodes-backdrop">
+            <div class="services-constellation-node core c1" style="top: 25%; left: 25%;"></div>
+            <div class="services-constellation-node core c2" style="top: 40%; left: 50%;"></div>
+            <div class="services-constellation-node core c3" style="top: 30%; left: 75%;"></div>
+            <div class="services-constellation-node support s1" style="top: 70%; left: 35%;"></div>
+            <div class="services-constellation-node support s2" style="top: 65%; left: 65%;"></div>
+            <div class="services-constellation-node support s3" style="top: 15%; left: 60%;"></div>
+            <div class="services-constellation-node support s4" style="top: 55%; left: 15%;"></div>
+          </div>
+
+          <!-- Service Content Cards -->
+          <div class="services-constellation-content">
+
+            <!-- Service 1: AI Calling (Primary) -->
+            <div class="services-constellation-card primary">
+              <div class="services-constellation-visual-anchor">
+                <!-- Abstract: Signal Orb -->
+                <div class="visual-object orb">
+                  <div class="orb-core"></div>
+                  <div class="orb-ring r1"></div>
+                  <div class="orb-ring r2"></div>
+                  <div class="orb-wave w1"></div>
+                </div>
+              </div>
+              <div class="services-constellation-card-body">
+                <div class="services-constellation-card-header">
+                  <svg class="services-constellation-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path
+                      d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                  <h3>AI Calling & Voice Operations</h3>
+                </div>
+                <ul class="services-constellation-card-points">
+                  <li>
+                    <span class="point-title">Your always-on receptionist + SDR</span>
+                    <span class="point-desc">Polite, persistent, and impossible to "forget to follow up."</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Inbound that never misses</span>
+                    <span class="point-desc">Greet → qualify → route → schedule</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Outbound that performs</span>
+                    <span class="point-desc">Targeted campaigns, callbacks, re-engagement</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Follow-ups on rails</span>
+                    <span class="point-desc">Multistep cadences across phone, SMS, WhatsApp, and email</span>
+                  </li>
+                  <li>
+                    <span class="point-title">CRM-native</span>
+                    <span class="point-desc">Notes, statuses, tasks — no data dead-ends</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Human-grade conversations</span>
+                    <span class="point-desc">Natural dialogue, context memory, graceful handoff to your team</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Service 2: AI Lead Systems (Lightweight) -->
+            <div class="services-constellation-card lightweight">
+              <div class="services-constellation-visual-anchor">
+                <!-- Abstract: Modular Blocks -->
+                <div class="visual-object blocks">
+                  <div class="block b1"></div>
+                  <div class="block b2"></div>
+                  <div class="block b3"></div>
+                  <div class="block b4"></div>
+                  <div class="block-path"></div>
+                </div>
+              </div>
+              <div class="services-constellation-card-body">
+                <div class="services-constellation-card-header">
+                  <svg class="services-constellation-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                    <polyline points="22,6 12,13 2,6" />
+                  </svg>
+                  <h3>AI Lead & Communication Systems</h3>
+                </div>
+                <p class="services-constellation-card-summary">Database management, intelligent email routing, and
+                  automated classification.</p>
+              </div>
+            </div>
+
+            <!-- Service 3: AI Video Ads (Coming Soon) -->
+            <div class="services-constellation-card upcoming">
+              <div class="services-constellation-visual-anchor">
+                <!-- Abstract: Stacked Planes -->
+                <div class="visual-object planes">
+                  <div class="plane p1"></div>
+                  <div class="plane p2"></div>
+                  <div class="plane p3"></div>
+                  <div class="plane-frame"></div>
+                </div>
+              </div>
+              <div class="services-constellation-card-body">
+                <div class="services-constellation-card-header">
+                  <svg class="services-constellation-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18" />
+                    <line x1="7" y1="2" x2="7" y2="22" />
+                    <line x1="17" y1="2" x2="17" y2="22" />
+                    <line x1="2" y1="12" x2="22" y2="12" />
+                    <line x1="2" y1="7" x2="7" y2="7" />
+                    <line x1="2" y1="17" x2="7" y2="17" />
+                    <line x1="17" y1="17" x2="22" y2="17" />
+                    <line x1="17" y1="7" x2="22" y2="7" />
+                  </svg>
+                  <div class="services-constellation-upcoming-badge">Coming soon</div>
+                  <h3>AI Video Ads</h3>
+                </div>
+                <ul class="services-constellation-card-points">
+                  <li>
+                    <span class="point-title">Rapid creative production</span>
+                    <span class="point-desc">Generate multiple video variations in minutes, not weeks</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Performance-driven storytelling</span>
+                    <span class="point-desc">Ads optimized for hooks, retention, and conversion</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Personalization at scale</span>
+                    <span class="point-desc">Dynamic messaging by audience, funnel stage, or intent</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Cross-platform ready</span>
+                    <span class="point-desc">Built for social, paid ads, and landing pages</span>
+                  </li>
+                  <li>
+                    <span class="point-title">Experimentation first</span>
+                    <span class="point-desc">Test, iterate, and scale what actually performs</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="script.js"></script>
 </body>
 
 </html>

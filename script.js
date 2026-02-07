@@ -99,24 +99,61 @@ document.addEventListener('DOMContentLoaded', () => {
 
   steps.forEach(step => observer.observe(step));
 
-  // 4. Animation Frame
-  let mouseX = 0, mouseY = 0;
-  window.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
-    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  // 4. Interaction Logic (Functional Wiring Fix)
+  const processSection = document.getElementById('process');
+  let targetRotationX = 0;
+  let targetRotationY = 0;
+  let isInteracting = false;
+  const lerpFactor = 0.05;
+  const maxRotation = 0.25;
+
+  // Accessibility & Device Checks
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Only enable interaction if on desktop and motion is fine
+  if (processSection && !isTouchDevice && !prefersReducedMotion) {
+    // Explicit pointer capture on the section container
+    processSection.addEventListener('pointermove', (e) => {
+      const rect = processSection.getBoundingClientRect();
+
+      // Normalize cursor position within the section bounds (-0.5 to 0.5)
+      const x = (e.clientX - rect.left) / rect.width - 0.5;
+      const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+      // Map to target rotations
+      targetRotationY = x * maxRotation * 2; // Range ~ -0.5 to 0.5
+      targetRotationX = y * maxRotation * 2;
+
+      isInteracting = true;
+    });
+
+    processSection.addEventListener('pointerenter', () => {
+      isInteracting = true;
+    });
+
+    processSection.addEventListener('pointerleave', () => {
+      isInteracting = false;
+    });
+  }
 
   const animate = () => {
     requestAnimationFrame(animate);
 
-    // Subtle parallax
-    currentGroup.rotation.y += (mouseX * 0.2 - currentGroup.rotation.y) * 0.05;
-    currentGroup.rotation.x += (-mouseY * 0.2 - currentGroup.rotation.x) * 0.05;
+    // Apply Cursor Influence with Inertia (Lerp)
+    if (isInteracting) {
+      currentGroup.rotation.y += (targetRotationY - currentGroup.rotation.y) * lerpFactor;
+      currentGroup.rotation.x += (targetRotationX - currentGroup.rotation.x) * lerpFactor;
+    } else {
+      // Smoothly blend back to baseline (idle state)
+      currentGroup.rotation.y += (0 - currentGroup.rotation.y) * lerpFactor;
+      currentGroup.rotation.x += (0 - currentGroup.rotation.x) * lerpFactor;
+    }
 
-    // Constant ambient rotation
+    // Constant ambient rotation (always active)
     currentGroup.rotation.z += 0.001;
 
-    // Specific animations per state
+    // Specific animations per state logic remains unchanged
     if (activeState === 'discovery') {
       states.discovery.rotation.y += 0.005;
     } else if (activeState === 'designing') {
@@ -136,7 +173,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 
-  // 5. Cleanup & Resize
+  // 7. Navbar Smooth Scrolling
+  document.querySelectorAll('.nav-links a').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const href = this.getAttribute('href');
+
+      // Only handle internal anchor links
+      if (href.startsWith('#') && href.length > 1) {
+        e.preventDefault();
+        const targetId = href.substring(1);
+        const targetElement = document.getElementById(targetId);
+
+        if (targetElement) {
+          targetElement.scrollIntoView({
+            behavior: 'smooth'
+          });
+        }
+      }
+    });
+  });
+
+  // 8. Cleanup & Resize
   window.addEventListener('resize', () => {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
