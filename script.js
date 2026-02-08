@@ -217,4 +217,27 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.updateProjectionMatrix();
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   });
+  // 11. Hide Navbar when Footer is visible
+const footerSection = document.getElementById('final-footer');
+const navbar = document.querySelector('.glass-nav');
+
+if (footerSection && navbar) {
+  const footerObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navbar.classList.add('nav-hidden');
+        } else {
+          navbar.classList.remove('nav-hidden');
+        }
+      });
+    },
+    {
+      root: null,
+      threshold: 0.15 // triggers when ~15% of footer is visible
+    }
+  );
+
+  footerObserver.observe(footerSection);
+}
 });
