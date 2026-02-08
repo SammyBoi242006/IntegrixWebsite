@@ -34,7 +34,7 @@
       <a href="#who-we-are-section">About Us</a>
       <a href="#demo-section">Demo</a>
       <a href="#services-constellation-section">Services</a>
-      <a href="#">Contact</a>
+      <a href="#final-footer">Contact</a>
     </div>
   </nav>
 
@@ -59,7 +59,7 @@
               <span></span><span></span><span></span>
             </div>
           </div>
-          <span class="label">Book a Discovery Call</span>
+          <span class="label" data-discovery>Book a Discovery Call</span>
         </a>
       </div>
     </div>
@@ -485,7 +485,7 @@
               <p class="final-footer-info-item">
                 <div class="final-footer-cta">
                   <p class="final-footer-label discuss-project">Let's discuss your project</p>
-                  <a href="#" class="final-footer-book-btn">Book a Discovery Call</a>
+                  <a href="#" class="final-footer-book-btn" data-discovery>Book a Discovery Call</a>
                 </div>
               </p>
 
@@ -499,7 +499,7 @@
               <a href="#services-constellation-section" class="final-footer-nav-link">Services</a>
               <a href="#process" class="final-footer-nav-link">Process</a>
               <a href="#who-we-are-section" class="final-footer-nav-link">About</a>
-              <a href="#" class="final-footer-nav-link">Contact</a>
+              <a href="#final-footer" class="final-footer-nav-link">Contact</a>
             </nav>
 
             <!-- CTA Link -->
@@ -515,6 +515,97 @@
         </div>
       </div>
     </section>
+
+
+<!-- DISCOVERY CALL MODAL -->
+<div id="discovery-modal" class="modal-overlay">
+  <div class="modal-card bordered">
+    <button class="modal-close" aria-label="Close">&times;</button>
+
+    <h2 class="modal-title">Book a Discovery Call</h2>
+    <p class="modal-subtitle">
+      Share a few details and we’ll reach out shortly.
+    </p>
+
+    <form id="discovery-form" novalidate>
+      <!-- NAME -->
+      <div class="form-group">
+        <label>Name *</label>
+        <input
+          type="text"
+          name="name"
+          required
+          placeholder="Your full name"
+        />
+      </div>
+
+      <!-- EMAIL (REQUIRED) -->
+      <div class="form-group">
+        <label>Email *</label>
+        <input
+          type="email"
+          name="email"
+          required
+          placeholder="you@company.com"
+        />
+      </div>
+
+      <!-- PHONE (OPTIONAL) -->
+      <div class="form-group">
+        <label>
+          Phone (optional)
+          <span class="hint">Recommended for faster reach</span>
+        </label>
+
+        <div class="phone-row">
+          <select name="country">
+            <option value="+91">🇮🇳 +91 (IN)</option>
+            <option value="+1">🇺🇸 +1 (US)</option>
+            <option value="+44">🇬🇧 +44 (UK)</option>
+            <option value="+61">🇦🇺 +61 (AU)</option>
+            <option value="+49">🇩🇪 +49 (DE)</option>
+            <option value="+33">🇫🇷 +33 (FR)</option>
+            <option value="+81">🇯🇵 +81 (JP)</option>
+            <option value="+971">🇦🇪 +971 (UAE)</option>
+          </select>
+
+          <input
+            type="tel"
+            name="phone"
+            placeholder="Phone number"
+          />
+        </div>
+      </div>
+
+      <!-- QUERY -->
+      <div class="form-group">
+        <label>Query (optional)</label>
+        <textarea
+          name="query"
+          rows="3"
+          placeholder="Briefly tell us what you're looking to build..."
+        ></textarea>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        Submit Request
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- SUCCESS MESSAGE -->
+<!-- CONFIRMATION POPUP -->
+<div id="confirmation-popup" class="confirmation-popup">
+  <div class="confirmation-content">
+    <p>
+      We’ve received your request.  
+      A confirmation has already been sent to your email — a small preview of how fast our automations work.
+    </p>
+    <button id="confirm-ok" class="confirm-btn">OK</button>
+  </div>
+</div>
+
     <script src="script.js"></script>
 </body>
 

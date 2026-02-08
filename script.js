@@ -42,6 +42,89 @@
   window.addEventListener('load', preload);
 })();
 
+
+
+// =========================
+// DISCOVERY CALL MODAL + CONFIRMATION
+// =========================
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("discovery-modal");
+  const closeBtn = modal.querySelector(".modal-close");
+  const form = document.getElementById("discovery-form");
+
+  const confirmation = document.getElementById("confirmation-popup");
+  const confirmOk = document.getElementById("confirm-ok");
+
+  /* -------------------------
+     OPEN MODAL (Hero + Footer)
+  -------------------------- */
+  document.querySelectorAll("[data-discovery]").forEach(btn => {
+    btn.addEventListener("click", e => {
+      e.preventDefault();
+      modal.classList.add("active");
+    });
+  });
+
+  /* -------------------------
+     CLOSE MODAL
+  -------------------------- */
+  closeBtn.addEventListener("click", () => {
+    modal.classList.remove("active");
+  });
+
+  modal.addEventListener("click", e => {
+    if (e.target === modal) {
+      modal.classList.remove("active");
+    }
+  });
+
+  /* -------------------------
+     FORM SUBMISSION
+  -------------------------- */
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+
+    if (!name) {
+      alert("Please enter your name.");
+      return;
+    }
+
+    if (!email) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    // CLOSE MODAL
+    modal.classList.remove("active");
+
+    // SHOW CONFIRMATION POPUP
+    showConfirmation();
+
+    // RESET FORM
+    form.reset();
+  });
+
+  /* -------------------------
+     CONFIRMATION POPUP
+  -------------------------- */
+  function showConfirmation() {
+    confirmation.classList.add("show");
+  }
+
+  confirmOk.addEventListener("click", () => {
+    confirmation.classList.remove("show");
+  });
+
+  /* Optional: auto-hide after 10s (backup UX) */
+  setTimeout(() => {
+    confirmation.classList.remove("show");
+  }, 10000);
+});
+
 /**
  * Three.js Visual Core Engine - "Our Process" Redesign
  */
