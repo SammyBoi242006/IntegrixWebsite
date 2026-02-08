@@ -18,6 +18,7 @@
     <div class="nav-links">
       <a href="#home">Home</a>
       <a href="#who-we-are-section">About Us</a>
+      <a href="#demo-section">Demo</a>
       <a href="#services-constellation-section">Services</a>
       <a href="#">Contact</a>
     </div>
@@ -219,6 +220,64 @@
         </div>
       </div>
     </div>
+  </section>
+    <!-- Demo Section -->
+    <section id="demo-section" class="demo-section-root">
+      <div class="demo-section-container">
+        <header class="demo-section-header">
+          <h2 class="demo-section-title">Demo</h2>
+        </header>
+
+        <div class="demo-section-cards">
+          <!-- Demo Card 1 -->
+          <div class="demo-section-card">
+            <h3 class="demo-section-card-title">Demo #1</h3>
+            <div class="demo-section-card-content">
+              <div class="demo-section-info">
+                <div class="demo-section-info-item">
+                  <span class="demo-section-label">Customer Query</span>
+                  <p class="demo-section-text">Query on flat near Mumbai</p>
+                </div>
+                <div class="demo-section-info-item">
+                  <span class="demo-section-label">Outcome</span>
+                  <p class="demo-section-text">Visit booked + qualified lead</p>
+                </div>
+              </div>
+              <div class="demo-section-audio-container">
+                <audio class="demo-section-audio" controls preload="metadata">
+                  <source src="assets/demo/demo1.mp3" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </div>
+          </div>
+
+          <!-- Demo Card 2 -->
+          <div class="demo-section-card">
+            <h3 class="demo-section-card-title">Demo #2</h3>
+            <div class="demo-section-card-content">
+              <div class="demo-section-info">
+                <div class="demo-section-info-item">
+                  <span class="demo-section-label">Customer Query</span>
+                  <p class="demo-section-text">Update visit date from their previous booking</p>
+                </div>
+                <div class="demo-section-info-item">
+                  <span class="demo-section-label">Outcome</span>
+                  <p class="demo-section-text">Handled database excellently</p>
+                </div>
+              </div>
+              <div class="demo-section-audio-container">
+                <audio class="demo-section-audio" controls preload="metadata">
+                  <source src="assets/demo/demo2.mp3" type="audio/mpeg">
+                  Your browser does not support the audio element.
+                </audio>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Our Services Section (AI Network with Detailed Content) -->
     <section id="services-constellation-section" class="services-constellation-root">
       <div class="services-constellation-container">
@@ -250,12 +309,15 @@
             <!-- Service 1: AI Calling (Primary) -->
             <div class="services-constellation-card primary">
               <div class="services-constellation-visual-anchor">
-                <!-- Abstract: Signal Orb -->
-                <div class="visual-object orb">
-                  <div class="orb-core"></div>
-                  <div class="orb-ring r1"></div>
-                  <div class="orb-ring r2"></div>
-                  <div class="orb-wave w1"></div>
+                <!-- Abstract: Waveform / Signal -->
+                <div class="visual-object waveform">
+                  <div class="bar b1"></div>
+                  <div class="bar b2"></div>
+                  <div class="bar b3"></div>
+                  <div class="bar b4"></div>
+                  <div class="bar b5"></div>
+                  <div class="bar b6"></div>
+                  <div class="bar b7"></div>
                 </div>
               </div>
               <div class="services-constellation-card-body">
@@ -299,13 +361,15 @@
             <!-- Service 2: AI Lead Systems (Lightweight) -->
             <div class="services-constellation-card lightweight">
               <div class="services-constellation-visual-anchor">
-                <!-- Abstract: Modular Blocks -->
-                <div class="visual-object blocks">
-                  <div class="block b1"></div>
-                  <div class="block b2"></div>
-                  <div class="block b3"></div>
-                  <div class="block b4"></div>
-                  <div class="block-path"></div>
+                <!-- Abstract: Modular Structure -->
+                <div class="visual-object modular-structure">
+                  <div class="node n1"></div>
+                  <div class="node n2"></div>
+                  <div class="node n3"></div>
+                  <div class="node n4"></div>
+                  <div class="line l1"></div>
+                  <div class="line l2"></div>
+                  <div class="line l3"></div>
                 </div>
               </div>
               <div class="services-constellation-card-body">
@@ -325,12 +389,15 @@
             <!-- Service 3: AI Video Ads (Coming Soon) -->
             <div class="services-constellation-card upcoming">
               <div class="services-constellation-visual-anchor">
-                <!-- Abstract: Stacked Planes -->
-                <div class="visual-object planes">
-                  <div class="plane p1"></div>
-                  <div class="plane p2"></div>
-                  <div class="plane p3"></div>
-                  <div class="plane-frame"></div>
+                <!-- Abstract: Cinematic Frame -->
+                <div class="visual-object cinematic-frame">
+                  <div class="frame-edge t"></div>
+                  <div class="frame-edge b"></div>
+                  <div class="frame-edge l"></div>
+                  <div class="frame-edge r"></div>
+                  <div class="layer l1"></div>
+                  <div class="layer l2"></div>
+                  <div class="layer l3"></div>
                 </div>
               </div>
               <div class="services-constellation-card-body">
@@ -379,6 +446,54 @@
       </div>
     </section>
 
+    <!-- Final Footer Section -->
+    <section id="final-footer" class="final-footer-root">
+      <div class="final-footer-container">
+        <!-- Large Brand Statement -->
+        <div class="final-footer-brand">
+          <h2 class="final-footer-brand-text">INTEGRIX AI</h2>
+        </div>
+
+        <!-- Footer Content Grid -->
+        <div class="final-footer-content">
+          <!-- Left Column: Company Info -->
+          <div class="final-footer-column">
+            <h3 class="final-footer-column-title">Integrix AI</h3>
+            <div class="final-footer-info">
+              <p class="final-footer-info-item">
+                <span class="final-footer-label">Email</span>
+                <a href="mailto:contact@integrix.ai" class="final-footer-link-plain">contact@integrix.ai</a>
+              </p>
+              <p class="final-footer-info-item">
+                <span class="final-footer-label">Phone</span>
+                <a href="tel:+1234567890" class="final-footer-link-plain">+1 (234) 567-890</a>
+              </p>
+            </div>
+          </div>
+
+          <!-- Right Column: Navigation Links -->
+          <div class="final-footer-column">
+            <h3 class="final-footer-column-title">Navigation</h3>
+            <nav class="final-footer-nav">
+              <a href="#services-constellation-section" class="final-footer-nav-link">Services</a>
+              <a href="#process" class="final-footer-nav-link">Process</a>
+              <a href="#who-we-are-section" class="final-footer-nav-link">About</a>
+              <a href="#" class="final-footer-nav-link">Contact</a>
+            </nav>
+
+            <!-- CTA Link -->
+            <div class="final-footer-cta">
+              <a href="#" class="final-footer-cta-link">Already working with us? Log in →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Copyright -->
+        <div class="final-footer-copyright">
+          <p>© Integrix AI. All rights reserved.</p>
+        </div>
+      </div>
+    </section>
     <script src="script.js"></script>
 </body>
 

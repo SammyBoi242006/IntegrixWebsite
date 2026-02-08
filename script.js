@@ -193,7 +193,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 8. Cleanup & Resize
+  // 9. Our Services - Staggered Fade-in
+  const serviceCards = document.querySelectorAll('.services-constellation-card');
+  const serviceObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const points = entry.target.querySelectorAll('.services-constellation-card-points li');
+        points.forEach((point, index) => {
+          setTimeout(() => {
+            point.classList.add('fade-in-visible');
+          }, index * 200); // 200ms stagger delay
+        });
+        serviceObserver.unobserve(entry.target); // Trigger once
+      }
+    });
+  }, { threshold: 0.2 });
+
+  serviceCards.forEach(card => serviceObserver.observe(card));
+
+  // 10. Cleanup & Resize
   window.addEventListener('resize', () => {
     camera.aspect = canvas.clientWidth / canvas.clientHeight;
     camera.updateProjectionMatrix();
