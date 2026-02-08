@@ -164,7 +164,7 @@
   --bg-color: #0e0f14;
   --accent-color: #ff5a5f;
   --text-color: #ffffff;
-  --font-family: 'Inter', sans-serif;
+  --font-family: 'Satoshi', sans-serif;
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
 }
@@ -173,6 +173,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  /* font-family: 'Satoshi', sans-serif; */
 }
 
 body,
@@ -238,7 +239,38 @@ html {
   flex-direction: column;
   justify-content: space-between;
 }
+/* Floating brand logo (separate from navbar) */
+.floating-logo {
+  position: fixed;
+  top: 24px;
+  left: 32px;
 
+  z-index: 10000;
+
+  display: flex;
+  align-items: center;
+
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.floating-logo img {
+  height: 100px; /* slightly larger since it’s standalone */
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .floating-logo {
+    top: 16px;
+    left: 16px;
+  }
+
+  .floating-logo img {
+    height: 28px;
+  }
+}
 /* Glass Navigation */
 .glass-nav {
   position: absolute;
