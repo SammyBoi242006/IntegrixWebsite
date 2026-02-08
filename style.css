@@ -1,3 +1,165 @@
+/* =========================
+   LOWERCASE i MORPH LOADER
+========================= */
+
+#global-loader {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition:
+    opacity 1s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 1s cubic-bezier(0.4, 0, 0.2, 1),
+    filter 1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Loader container */
+.loader-i {
+  position: relative;
+  width: 42px;
+  height: 76px;
+}
+
+/* Shared styles */
+.loader-i span {
+  position: absolute;
+  left: 50%;
+  background: #111;
+  transform: translateX(-50%);
+}
+
+/* STEM */
+.loader-i .stem {
+  bottom: 0;
+  width: 6px;
+  height: 48px;
+  border-radius: 3px;
+  animation: stem-logic 2.6s ease-in-out infinite;
+}
+
+/* DOT */
+.loader-i .dot {
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  animation: dot-logic 2.6s ease-in-out infinite;
+}
+
+/* =========================
+   STEM TIMING (DISAPPEAR DURING RING)
+========================= */
+
+@keyframes stem-logic {
+  /* Normal i */
+  0% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+
+  /* Move upward */
+  25% {
+    transform: translate(-50%, -14px);
+    opacity: 1;
+  }
+
+  /* Fully disappear BEFORE ring */
+  40% {
+    opacity: 0;
+  }
+
+  /* Stay hidden while ring exists */
+  60% {
+    opacity: 0;
+  }
+
+  /* Reappear AFTER dot reforms */
+  80% {
+    transform: translate(-50%, -14px);
+    opacity: 1;
+  }
+
+  /* Original position */
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
+
+/* =========================
+   DOT → RING → DOT
+========================= */
+
+@keyframes dot-logic {
+  /* Original dot */
+  0% {
+    width: 10px;
+    height: 10px;
+    background: #111;
+    border: none;
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+
+  /* Move downward */
+  25% {
+    transform: translate(-50%, 18px);
+  }
+
+  /* Become ring */
+  40% {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: 3px solid #111;
+    transform: translate(-50%, 22px) rotate(0deg);
+  }
+
+  /* Slow spinner */
+  60% {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: 3px solid #111;
+    transform: translate(-50%, 22px) rotate(180deg);
+  }
+
+  /* Collapse back into dot */
+  80% {
+    width: 10px;
+    height: 10px;
+    background: #111;
+    border: none;
+    transform: translate(-50%, 18px);
+  }
+
+  /* Original dot position */
+  100% {
+    transform: translate(-50%, 0) rotate(360deg);
+  }
+}
+
+/* =========================
+   SOOTHING EXIT
+========================= */
+
+#global-loader.hide {
+  opacity: 0;
+  transform: scale(1.04);
+  filter: blur(8px);
+  pointer-events: none;
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .loader-i span {
+    animation: none;
+  }
+}
+
 :root {
   --bg-color: #0e0f14;
   --accent-color: #ff5a5f;

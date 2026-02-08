@@ -1,3 +1,47 @@
+(function () {
+  const loader = document.getElementById('global-loader');
+  const MIN_TIME = 2000;
+
+  function waitForImages() {
+    return Promise.all(
+      [...document.images].map(img =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise(res => (img.onload = img.onerror = res))
+      )
+    );
+  }
+
+  function waitForVideos() {
+    return Promise.all(
+      [...document.querySelectorAll('video')].map(video =>
+        video.readyState >= 3
+          ? Promise.resolve()
+          : new Promise(res => {
+              video.addEventListener('canplaythrough', res, { once: true });
+              video.addEventListener('error', res, { once: true });
+            })
+      )
+    );
+  }
+
+  function waitMinTime() {
+    return new Promise(res => setTimeout(res, MIN_TIME));
+  }
+
+  async function preload() {
+    await Promise.all([
+      waitForImages(),
+      waitForVideos(),
+      waitMinTime()
+    ]);
+
+    loader.classList.add('hide');
+  }
+
+  window.addEventListener('load', preload);
+})();
+
 /**
  * Three.js Visual Core Engine - "Our Process" Redesign
  */
