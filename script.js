@@ -1,3 +1,4 @@
+console.log("Discovery JS loaded");
 (function () {
   const loader = document.getElementById('global-loader');
   const MIN_TIME = 2000;
@@ -82,53 +83,71 @@ document.addEventListener("DOMContentLoaded", () => {
   /* -------------------------
      FORM SUBMISSION
   -------------------------- */
-  form.addEventListener("submit", e => {
-    e.preventDefault();
+form.addEventListener("submit", async e => {
+  e.preventDefault();
 
-    const name = form.name.value.trim();
-    const email = form.email.value.trim();
+  const payload = {
+    name: form.name.value.trim(),
+    email: form.email.value.trim(),
+    phone: form.phone.value.trim(),
+    query: form.query.value.trim()
+  };
 
-    if (!name) {
-      alert("Please enter your name.");
-      return;
+  console.log("🚀 Submitting payload:", payload);
+
+  try {
+    const response = await fetch(
+      "https://examplerealestate.app.n8n.cloud/webhook/discovery-call",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      }
+    );
+
+    console.log("status:", response.status);
+
+    if (response.status !== 200) {
+      throw new Error(`Unexpected status: ${response.status}`);
     }
 
-    if (!email) {
-      alert("Please enter a valid email address.");
-      return;
-    }
-
-    // CLOSE MODAL
     modal.classList.remove("active");
-
-    // SHOW CONFIRMATION POPUP
     showConfirmation();
-
-    // RESET FORM
     form.reset();
-  });
 
-  /* -------------------------
-     CONFIRMATION POPUP
-  -------------------------- */
-  function showConfirmation() {
-    confirmation.classList.add("show");
+  } catch (err) {
+    console.error("❌ Caught error:", err);
+    alert("Something went wrong. Please try again.");
   }
+});
 
-  confirmOk.addEventListener("click", () => {
-    confirmation.classList.remove("show");
-  });
+/* -------------------------
+   CONFIRMATION POPUP
+-------------------------- */
+function showConfirmation() {
+  if (!confirmation) {
+    console.error("Confirmation popup not found");
+    return;
+  }
+  confirmation.classList.add("show");
+}
 
-  /* Optional: auto-hide after 10s (backup UX) */
-  setTimeout(() => {
-    confirmation.classList.remove("show");
-  }, 10000);
+confirmOk.addEventListener("click", () => {
+  confirmation.classList.remove("show");
+});
+
+setTimeout(() => {
+  confirmation.classList.remove("show");
+}, 10000);
 });
 
 /**
  * Three.js Visual Core Engine - "Our Process" Redesign
  */
 document.addEventListener('DOMContentLoaded', () => {
+  const confirmation = document.getElementById("confirmation-popup");
   const canvas = document.querySelector('#visual-core-canvas');
   if (!canvas) return;
 
