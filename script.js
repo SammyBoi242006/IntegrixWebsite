@@ -240,4 +240,22 @@ if (footerSection && navbar) {
 
   footerObserver.observe(footerSection);
 }
+// Smooth scroll for all internal anchor links (navbar + footer)
+document.addEventListener("click", function (e) {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+
+  const targetId = link.getAttribute("href");
+  if (targetId === "#") return;
+
+  const targetEl = document.querySelector(targetId);
+  if (!targetEl) return;
+
+  e.preventDefault();
+
+  targetEl.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+});
 });

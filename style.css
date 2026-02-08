@@ -1756,6 +1756,11 @@ html {
   letter-spacing: 0.1em;
   color: rgba(14, 15, 20, 0.5);
 }
+.discuss-project{
+  margin-bottom: 20px;
+  color: black;
+}
+
 
 .final-footer-link-plain {
   font-size: 1rem;
@@ -1843,11 +1848,30 @@ html {
   border-radius: 6px;
   transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
 }
+.final-footer-book-btn{
+  position: relative;
+  display: inline-block;
+  font-size: 1.2rem;
+  font-weight: 600;
+  /* color: #ff5a5f; */
+  color: #ffffff;
+  text-decoration: none;
+  padding: 14px 28px;
+  
+  background-color: #ff5a5f;
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
 
 .final-footer-cta-link:hover {
   background: #ff5a5f;
   color: #ffffff;
   transform: translateX(4px);
+}
+.final-footer-book-btn:hover{
+  border: 2px solid #ff5a5f;
+  color: #ff5a5f;
+  background-color: #ffffff;
 }
 
 /* Copyright */
