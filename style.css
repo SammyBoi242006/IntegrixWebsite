@@ -2109,9 +2109,14 @@
     z-index: 9999;
   }
 
+  .modal-title {
+    color: #444;
+  }
+
   .modal-subtitle {
     margin-top: 5px;
     margin-bottom: 12px;
+    color: #444;
   }
 
   .modal-overlay.active {
