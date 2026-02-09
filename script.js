@@ -19,9 +19,9 @@ console.log("Discovery JS loaded");
         video.readyState >= 3
           ? Promise.resolve()
           : new Promise(res => {
-              video.addEventListener('canplaythrough', res, { once: true });
-              video.addEventListener('error', res, { once: true });
-            })
+            video.addEventListener('canplaythrough', res, { once: true });
+            video.addEventListener('error', res, { once: true });
+          })
       )
     );
   }
@@ -83,64 +83,64 @@ document.addEventListener("DOMContentLoaded", () => {
   /* -------------------------
      FORM SUBMISSION
   -------------------------- */
-form.addEventListener("submit", async e => {
-  e.preventDefault();
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
 
-  const payload = {
-    name: form.name.value.trim(),
-    email: form.email.value.trim(),
-    phone: form.phone.value.trim(),
-    query: form.query.value.trim()
-  };
+    const payload = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      phone: form.phone.value.trim(),
+      query: form.query.value.trim()
+    };
 
-  console.log("🚀 Submitting payload:", payload);
+    console.log("🚀 Submitting payload:", payload);
 
-  try {
-    const response = await fetch(
-      "https://examplerealestate.app.n8n.cloud/webhook/discovery-call",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
+    try {
+      const response = await fetch(
+        "https://examplerealestate.app.n8n.cloud/webhook/discovery-call",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }
+      );
+
+      console.log("status:", response.status);
+
+      if (response.status !== 200) {
+        throw new Error(`Unexpected status: ${response.status}`);
       }
-    );
 
-    console.log("status:", response.status);
+      modal.classList.remove("active");
+      showConfirmation();
+      form.reset();
 
-    if (response.status !== 200) {
-      throw new Error(`Unexpected status: ${response.status}`);
+    } catch (err) {
+      console.error("❌ Caught error:", err);
+      alert("Something went wrong. Please try again.");
     }
+  });
 
-    modal.classList.remove("active");
-    showConfirmation();
-    form.reset();
-
-  } catch (err) {
-    console.error("❌ Caught error:", err);
-    alert("Something went wrong. Please try again.");
+  /* -------------------------
+     CONFIRMATION POPUP
+  -------------------------- */
+  function showConfirmation() {
+    if (!confirmation) {
+      console.error("Confirmation popup not found");
+      return;
+    }
+    confirmation.classList.add("show");
   }
-});
 
-/* -------------------------
-   CONFIRMATION POPUP
--------------------------- */
-function showConfirmation() {
-  if (!confirmation) {
-    console.error("Confirmation popup not found");
-    return;
-  }
-  confirmation.classList.add("show");
-}
+  confirmOk.addEventListener("click", () => {
+    confirmation.classList.remove("show");
+  });
 
-confirmOk.addEventListener("click", () => {
-  confirmation.classList.remove("show");
-});
-
-setTimeout(() => {
-  confirmation.classList.remove("show");
-}, 10000);
+  setTimeout(() => {
+    confirmation.classList.remove("show");
+  }, 10000);
 });
 
 /**
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Discovery State: Scanning Points
   const discoveryGeo = new THREE.IcosahedronGeometry(3, 2);
-  const discoveryMat = new THREE.PointsMaterial({ color: 0xff5a5f, size: 0.05 });
+  const discoveryMat = new THREE.PointsMaterial({ color: 0xff5a5f, size: 0.09 });
   states.discovery = new THREE.Points(discoveryGeo, discoveryMat);
 
   // Designing State: Structural Wireframe
@@ -319,25 +319,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   animate();
 
-  // 7. Navbar Smooth Scrolling
-  document.querySelectorAll('.nav-links a').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-      const href = this.getAttribute('href');
+  // // 7. Navbar Smooth Scrolling
+  // document.querySelectorAll('.nav-links a').forEach(anchor => {
+  //   anchor.addEventListener('click', function (e) {
+  //     const href = this.getAttribute('href');
 
-      // Only handle internal anchor links
-      if (href.startsWith('#') && href.length > 1) {
-        e.preventDefault();
-        const targetId = href.substring(1);
-        const targetElement = document.getElementById(targetId);
+  //     // Only handle internal anchor links
+  //     if (href.startsWith('#') && href.length > 1) {
+  //       e.preventDefault();
+  //       const targetId = href.substring(1);
+  //       const targetElement = document.getElementById(targetId);
 
-        if (targetElement) {
-          targetElement.scrollIntoView({
-            behavior: 'smooth'
-          });
-        }
-      }
-    });
-  });
+  //       if (targetElement) {
+  //         targetElement.scrollIntoView({
+  //           behavior: 'smooth'
+  //         });
+  //       }
+  //     }
+  //   });
+  // });
 
   // 9. Our Services - Staggered Fade-in
   const serviceCards = document.querySelectorAll('.services-constellation-card');
@@ -364,44 +364,48 @@ document.addEventListener('DOMContentLoaded', () => {
     renderer.setSize(canvas.clientWidth, canvas.clientHeight);
   });
   // 11. Hide Navbar when Footer is visible
-const footerSection = document.getElementById('final-footer');
-const navbar = document.querySelector('.glass-nav');
+  // Hide navbar & floating logo when footer is visible
+  const footerSection = document.getElementById('final-footer');
+  const navbar = document.querySelector('.glass-nav');
+  const floatingLogo = document.querySelector('.floating-logo');
 
-if (footerSection && navbar) {
-  const footerObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          navbar.classList.add('nav-hidden');
-        } else {
-          navbar.classList.remove('nav-hidden');
-        }
-      });
-    },
-    {
-      root: null,
-      threshold: 0.15 // triggers when ~15% of footer is visible
-    }
-  );
+  if (footerSection && navbar && floatingLogo) {
+    const footerObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            navbar.classList.add('nav-hidden');
+            floatingLogo.classList.add('logo-hidden');
+          } else {
+            navbar.classList.remove('nav-hidden');
+            floatingLogo.classList.remove('logo-hidden');
+          }
+        });
+      },
+      {
+        threshold: 0.15
+      }
+    );
 
-  footerObserver.observe(footerSection);
-}
-// Smooth scroll for all internal anchor links (navbar + footer)
-document.addEventListener("click", function (e) {
-  const link = e.target.closest('a[href^="#"]');
-  if (!link) return;
+    footerObserver.observe(footerSection);
+  }
+  // Smooth scroll for all internal anchor links (navbar + footer)
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest('a[href^="#"]');
+    if (!link) return;
 
-  const targetId = link.getAttribute("href");
-  if (targetId === "#") return;
+    const targetId = link.getAttribute("href");
+    if (targetId === "#") return;
 
-  const targetEl = document.querySelector(targetId);
-  if (!targetEl) return;
+    const targetEl = document.querySelector(targetId);
+    if (!targetEl) return;
 
-  e.preventDefault();
+    e.preventDefault();
 
-  targetEl.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
+    targetEl.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
   });
-});
+
 });
