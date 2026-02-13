@@ -26,7 +26,7 @@ export function renderLogin() {
         </form>
         
         <p class="text-center mt-3">
-          Don't have an account? <a href="#/signup" class="auth-link">Sign up</a>
+          Need Access? <a href="../index.html#final-footer" class="auth-link">Contact support</a>
         </p>
       </div>
     </div>
