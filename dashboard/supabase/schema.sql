@@ -77,6 +77,7 @@ CREATE TABLE calls (
     start_time TIMESTAMP WITH TIME ZONE,
     duration_seconds INTEGER,
     cost_usd NUMERIC(10, 4),
+    recording_url TEXT, -- URL to the call recording from VAPI artifact
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

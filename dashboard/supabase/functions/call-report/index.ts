@@ -50,8 +50,23 @@ serve(async (req) => {
 
     const message = payload.message || {};
     const call = message.call || payload.call || {};
-    const artifact = message.artifact || {};
+    const artifact = message.artifact || payload.artifact || {};
     const variables = artifact.variables || {};
+
+    // Extract recording URL from artifact
+    const recordingUrl =
+      artifact.recordingUrl ||
+      artifact.recordingURL ||
+      artifact.recording_url ||
+      artifact.recording?.url ||
+      artifact.recording?.URL ||
+      message.recordingUrl ||
+      message.recordingURL ||
+      call.recordingUrl ||
+      call.recordingURL ||
+      payload.recordingUrl ||
+      payload.recordingURL ||
+      "";
 
     // Super Robust Extraction Logic for org_id
     // Check multiple common VAPI payload paths and field names
@@ -106,7 +121,8 @@ serve(async (req) => {
       orgId: orgId,
       callType,
       vapiCallId,
-      assistantName
+      assistantName,
+      hasRecording: !!recordingUrl
     });
 
     // FILTER: Only process the final report to avoid duplicate records for one call
@@ -181,6 +197,7 @@ serve(async (req) => {
         assistant_phone_number: assistantPhoneNumber,
         customer_phone_number: customerPhoneNumber,
         transcript: transcript,
+        recording_url: recordingUrl,
         call_type: callType,
         ended_reason: endedReason,
         start_time: startTime,
