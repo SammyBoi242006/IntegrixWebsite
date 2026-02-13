@@ -19,10 +19,13 @@ export function renderAdmin() {
   const app = document.getElementById('app');
 
   app.innerHTML = `
-    <div class="container">
-      <h1>Admin Panel</h1>
-      <p class="text-muted mb-3">Manage users and view all call data</p>
-      
+    <div class="container" style="padding-top: 1rem;">
+      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+        <div>
+          <h1 style="margin-bottom: 0.5rem; letter-spacing: -1px; font-weight: 800;">Admin Panel</h1>
+          <p class="text-muted">Manage users and view all call data</p>
+        </div>
+      </div>
       <!-- Users Section -->
       <div class="card mb-3">
         <h2 style="margin-bottom: 1rem;">Users</h2>

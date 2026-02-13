@@ -193,16 +193,24 @@
         <nav class="nav">
           <div class="nav-container">
             <a href="#/" class="nav-brand">Integrix Dashboard</a>
-            <div class="nav-links">
-              <a class="nav-link" data-route="/" href="#/">Dashboard</a>
-              <a class="nav-link" data-route="/profile" href="#/profile">Profile</a>
-              ${isAdmin ? '<a class="nav-link" data-route="/admin" href="#/admin">Admin</a>' : ''}
-              
-              <button class="theme-toggle" onclick="toggleTheme()" id="theme-icon" title="Toggle Theme">
-                <!-- Icon inserted by script -->
-              </button>
+            
+            <button class="nav-toggle" onclick="this.classList.toggle('active'); document.getElementById('nav-menu').classList.toggle('active');" aria-label="Toggle Navigation">
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
 
-              <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
+            <div class="nav-links" id="nav-menu">
+              <a class="nav-link" data-route="/" href="#/" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Dashboard</a>
+              <a class="nav-link" data-route="/profile" href="#/profile" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Profile</a>
+              ${isAdmin ? `<a class="nav-link" data-route="/admin" href="#/admin" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Admin</a>` : ''}
+              
+              <div class="nav-actions">
+                <button class="theme-toggle" onclick="toggleTheme()" id="theme-icon" title="Toggle Theme">
+                  <!-- Icon inserted by script -->
+                </button>
+                <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
+              </div>
             </div>
           </div>
         </nav>

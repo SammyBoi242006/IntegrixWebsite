@@ -10,8 +10,8 @@ export function renderDashboard() {
   const app = document.getElementById('app');
 
   app.innerHTML = `
-    <div class="container">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <div class="container" style="padding-top: 1rem;">
+      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
         <div>
           <h1 style="margin-bottom: 0.5rem; letter-spacing: -1px; font-weight: 800;">Analytics Dashboard</h1>
           <p class="text-muted">Real-time performance metrics</p>
