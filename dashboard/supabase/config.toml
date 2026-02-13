@@ -1,0 +1,4 @@
+# Supabase Configuration for VAPI Call Tracking System
+
+[functions.call-report]
+verify_jwt = false  # Disable JWT verification for webhook endpoint

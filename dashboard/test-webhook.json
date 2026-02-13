@@ -1,0 +1,23 @@
+{
+  "message": {
+    "timestamp": 1709232465976,
+    "type": "end-of-call-report",
+    "cost": 0.0352,
+    "durationSeconds": 15,
+    "endedReason": "customer-ended-call",
+    "startedAt": "2025-02-12T11:53:35.265Z",
+    "transcript": "AI: Hello, thank you for calling. How can I help you today?\nUser: Hi, I'm calling about my recent order.\nAI: I'd be happy to help with that. Can you provide your order number?\nUser: Yes, it's 12345.\nAI: Thank you. Let me look that up for you.",
+    "artifact": {
+      "variables": {
+        "phoneNumber": {
+          "orgId": "6a12163e-1f88-4b4e-a8c8-16a9f68dc1b3",
+          "name": "Customer Support Assistant",
+          "number": "+16126423441"
+        },
+        "customer": {
+          "number": "+19342034111"
+        }
+      }
+    }
+  }
+}

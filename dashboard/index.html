@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VAPI Call Tracking Dashboard</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Supabase Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+  <!-- Navigation (rendered dynamically) -->
+  <div id="nav"></div>
+
+  <!-- Main App Container -->
+  <div id="app">
+    <div class="loading">
+      <div class="spinner"></div>
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <!-- Load modules -->
+  <script type="module">
+    // Import all modules
+    import { SUPABASE_CONFIG } from './js/config.js';
+    import { showToast, formatDate, formatDuration, formatCurrency, formatNumber, getDateRange } from './js/utils.js';
+    import { renderLogin, renderSignup } from './js/auth.js';
+    import { renderProfile } from './js/profile.js';
+    import { renderDashboard, cleanupDashboard } from './js/dashboard.js';
+    import { renderAdmin } from './js/admin.js';
+
+    // Initialize Supabase client
+    const { createClient } = supabase;
+    window.supabaseClient = createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
+
+    // Make utilities globally available
+    window.showToast = showToast;
+    window.formatDate = formatDate;
+    window.formatDuration = formatDuration;
+    window.formatCurrency = formatCurrency;
+    window.formatNumber = formatNumber;
+    window.getDateRange = getDateRange;
+
+    // Router
+    class Router {
+      constructor() {
+        this.routes = {};
+        this.currentRoute = null;
+      }
+
+      register(path, handler) {
+        this.routes[path] = handler;
+      }
+
+      navigate(path) {
+        if (this.routes[path]) {
+          this.currentRoute = path;
+          this.routes[path]();
+
+          // Update active nav links
+          document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.route === path) {
+              link.classList.add('active');
+            }
+          });
+        }
+      }
+
+      init() {
+        // Handle initial route
+        const hash = window.location.hash.slice(1) || '/';
+        this.navigate(hash);
+
+        // Handle hash changes
+        window.addEventListener('hashchange', () => {
+          const newHash = window.location.hash.slice(1) || '/';
+          this.navigate(newHash);
+        });
+      }
+    }
+
+    // Create global router
+    window.router = new Router();
+
+    // Authentication state
+    let currentUser = null;
+    let userProfile = null;
+    let isAdmin = false;
+
+    // Check authentication status
+    async function checkAuth() {
+      const { data: { session } } = await window.supabaseClient.auth.getSession();
+
+      if (session) {
+        currentUser = session.user;
+
+        // Get user profile
+        const { data: profile } = await window.supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', currentUser.id)
+          .single();
+
+        userProfile = profile;
+
+        // Check if user is admin
+        const { data: roles } = await window.supabaseClient
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', currentUser.id);
+
+        isAdmin = roles?.some(r => r.role === 'admin') || false;
+
+        return true;
+      }
+
+      return false;
+    }
+
+    // Render navigation
+    function renderNav() {
+      const navContainer = document.getElementById('nav');
+
+      if (!currentUser) {
+        navContainer.innerHTML = '';
+        return;
+      }
+
+      navContainer.innerHTML = `
+        <nav class="nav">
+          <div class="nav-container">
+            <a href="#/" class="nav-brand">VAPI Dashboard</a>
+            <div class="nav-links">
+              <a class="nav-link" data-route="/" href="#/">Dashboard</a>
+              <a class="nav-link" data-route="/profile" href="#/profile">Profile</a>
+              ${isAdmin ? '<a class="nav-link" data-route="/admin" href="#/admin">Admin</a>' : ''}
+              <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
+            </div>
+          </div>
+        </nav>
+      `;
+    }
+
+    // Logout handler
+    window.handleLogout = async function () {
+      await window.supabaseClient.auth.signOut();
+      currentUser = null;
+      userProfile = null;
+      isAdmin = false;
+      window.location.hash = '/login';
+      showToast('Logged out successfully', 'success');
+    };
+
+    // Protected route wrapper
+    async function protectedRoute(handler) {
+      const isAuthenticated = await checkAuth();
+
+      if (!isAuthenticated) {
+        window.location.hash = '/login';
+        return;
+      }
+
+      renderNav();
+      handler();
+    }
+
+    // Public route wrapper
+    async function publicRoute(handler) {
+      const isAuthenticated = await checkAuth();
+
+      if (isAuthenticated) {
+        window.location.hash = '/';
+        return;
+      }
+
+      document.getElementById('nav').innerHTML = '';
+      handler();
+    }
+
+    // Register routes
+    window.router.register('/login', () => publicRoute(renderLogin));
+    window.router.register('/signup', () => publicRoute(renderSignup));
+    window.router.register('/', () => protectedRoute(renderDashboard));
+    window.router.register('/profile', () => protectedRoute(renderProfile));
+    window.router.register('/admin', () => protectedRoute(renderAdmin));
+
+    // Export app state
+    window.appState = {
+      getCurrentUser: () => currentUser,
+      getUserProfile: () => userProfile,
+      isAdmin: () => isAdmin,
+      refreshAuth: checkAuth
+    };
+
+    // Initialize app
+    window.addEventListener('DOMContentLoaded', () => {
+      window.router.init();
+    });
+
+    // Initialize immediately if DOM is already loaded
+    if (document.readyState === 'loading') {
+      // Still loading
+    } else {
+      // DOM is ready
+      window.router.init();
+    }
+  </script>
+</body>
+
+</html>
