@@ -99,6 +99,7 @@ function renderNav() {
         <div class="nav-links">
           <a class="nav-link" data-route="/" href="#/">Dashboard</a>
           <a class="nav-link" data-route="/profile" href="#/profile">Profile</a>
+          <a class="nav-link" data-route="/campaigns" href="#/campaigns">Campaigns</a>
           ${isAdmin ? '<a class="nav-link" data-route="/admin" href="#/admin">Admin</a>' : ''}
           <button class="btn btn-logout" onclick="handleLogout()">Logout</button>
         </div>
@@ -148,6 +149,7 @@ window.router.register('/login', () => publicRoute(renderLogin));
 window.router.register('/signup', () => publicRoute(renderSignup));
 window.router.register('/', () => protectedRoute(renderDashboard));
 window.router.register('/profile', () => protectedRoute(renderProfile));
+window.router.register('/campaigns', () => protectedRoute(renderCampaigns));
 window.router.register('/admin', () => protectedRoute(renderAdmin));
 
 // Placeholder render functions (will be replaced by imports)

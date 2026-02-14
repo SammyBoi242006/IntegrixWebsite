@@ -65,6 +65,7 @@
     import { renderLogin, renderSignup } from './js/auth.js';
     import { renderProfile } from './js/profile.js';
     import { renderDashboard, cleanupDashboard } from './js/dashboard.js';
+    import { renderCampaigns, cleanupCampaigns } from './js/campaigns.js';
     import { renderAdmin } from './js/admin.js';
 
     // Initialize Supabase client
@@ -203,6 +204,7 @@
             <div class="nav-links" id="nav-menu">
               <a class="nav-link" data-route="/" href="#/" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Dashboard</a>
               <a class="nav-link" data-route="/profile" href="#/profile" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Profile</a>
+              <a class="nav-link" data-route="/campaigns" href="#/campaigns" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Campaigns</a>
               ${isAdmin ? `<a class="nav-link" data-route="/admin" href="#/admin" onclick="document.getElementById('nav-menu').classList.remove('active'); document.querySelector('.nav-toggle').classList.remove('active');">Admin</a>` : ''}
               
               <div class="nav-actions">
@@ -259,6 +261,7 @@
     window.router.register('/signup', () => publicRoute(renderSignup));
     window.router.register('/', () => protectedRoute(renderDashboard));
     window.router.register('/profile', () => protectedRoute(renderProfile));
+    window.router.register('/campaigns', () => protectedRoute(renderCampaigns));
     window.router.register('/admin', () => protectedRoute(renderAdmin));
 
     // Export app state

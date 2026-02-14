@@ -13,6 +13,9 @@ CREATE TABLE profiles (
     email TEXT,
     display_name TEXT,
     org_id TEXT, -- Maps to VAPI organization ID
+    vapi_api_key TEXT,
+    vapi_assistant_id TEXT,
+    vapi_phone_number_id TEXT,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
