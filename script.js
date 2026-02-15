@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        "https://examplerealestate.app.n8n.cloud/webhook/discovery-call",
+        "http://localhost:5678/webhook/discovery-call",
         {
           method: "POST",
           headers: {
