@@ -4,6 +4,8 @@ import { formatDate, formatDuration, formatCurrency, formatNumber, showToast, ge
 let callsSubscription = null;
 let currentCalls = [];
 let dateRangeDays = 30;
+let customStartDate = null;
+let customEndDate = null;
 let charts = {};
 
 export function renderDashboard() {
@@ -11,21 +13,34 @@ export function renderDashboard() {
 
   app.innerHTML = `
     <div class="container" style="padding-top: 1rem;">
-      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <div class="dashboard-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
         <div>
           <h1 style="margin-bottom: 0.5rem; letter-spacing: -1px; font-weight: 800;">Analytics Dashboard</h1>
           <p class="text-muted">Real-time performance metrics</p>
         </div>
         
-        <div class="filters">
+        <div class="filters" style="display: flex; align-items: flex-end; gap: 10px;">
           <div class="filter-group">
             <label for="date-range">Timeframe</label>
-            <select id="date-range" onchange="handleDateRangeChange(this.value)">
+            <select id="date-range" onchange="handleDateRangeChange(this.value)" style="min-width: 150px;">
               <option value="7">Last 7 days</option>
               <option value="30" selected>Last 30 days</option>
               <option value="90">Last 90 days</option>
               <option value="365">Last year</option>
+              <option value="custom">Custom Range</option>
             </select>
+          </div>
+          
+          <div id="custom-date-inputs" class="hidden" style="display: flex; gap: 10px; align-items: flex-end;">
+            <div>
+              <label for="start-date" style="font-size: 11px;">Start</label>
+              <input type="datetime-local" id="start-date" style="padding: 10px; width: 180px;">
+            </div>
+            <div>
+              <label for="end-date" style="font-size: 11px;">End</label>
+              <input type="datetime-local" id="end-date" style="padding: 10px; width: 180px;">
+            </div>
+            <button class="btn-primary" onclick="applyCustomDateRange()" style="height: 42px; padding: 0 20px;">Apply</button>
           </div>
         </div>
       </div>
@@ -94,11 +109,12 @@ export function renderDashboard() {
               <th>Cost</th>
               <th>Outcome</th>
               <th>Details</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="calls-table-body">
             <tr>
-              <td colspan="7" class="text-center">Loading call records...</td>
+              <td colspan="8" class="text-center">Loading call records...</td>
             </tr>
           </tbody>
         </table>
@@ -139,6 +155,23 @@ export function renderDashboard() {
         <div id="transcript-content" style="white-space: pre-wrap; line-height: 1.8; color: var(--text-secondary); font-size: 15px;"></div>
       </div>
     </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="confirm-modal" class="modal-overlay hidden" onclick="closeConfirmModal(event)">
+      <div class="modal modal-confirm" onclick="event.stopPropagation()">
+        <div style="margin-bottom: 1.5rem;">
+          <div style="width: 48px; height: 48px; background: rgba(220, 38, 38, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </div>
+          <h3 style="margin-bottom: 0.5rem; font-size: 18px; font-weight: 700;">Confirm Deletion</h3>
+          <p class="text-muted" id="confirm-message">Are you sure you want to delete this item?</p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-cancel" onclick="closeConfirmModal()">Cancel</button>
+          <button id="confirm-btn" class="btn btn-danger">Delete Record</button>
+        </div>
+      </div>
+    </div>
   `;
 
   // Load calls
@@ -159,7 +192,20 @@ function handleThemeChange() {
 // Load calls from database
 async function loadCalls() {
   const user = window.appState.getCurrentUser();
-  const { start, end } = getDateRange(dateRangeDays);
+  let start, end;
+
+  if (dateRangeDays === 'custom') {
+    if (!customStartDate || !customEndDate) {
+      // Don't load if custom range incomplete
+      return;
+    }
+    start = new Date(customStartDate);
+    end = new Date(customEndDate);
+  } else {
+    const range = getDateRange(dateRangeDays);
+    start = range.start;
+    end = range.end;
+  }
 
   const { data: calls, error } = await window.supabaseClient
     .from('calls')
@@ -191,7 +237,13 @@ function updateMetrics() {
   document.getElementById('metric-avg').textContent = formatCurrency(avgCost);
 
   // Update trend labels
-  const timeframeLabel = `Last ${dateRangeDays}D`;
+  let timeframeLabel;
+  if (dateRangeDays === 'custom') {
+    timeframeLabel = 'Custom Range';
+  } else {
+    timeframeLabel = `Last ${dateRangeDays}D`;
+  }
+
   document.getElementById('trend-minutes-sub').textContent = timeframeLabel;
   document.getElementById('trend-count-sub').textContent = timeframeLabel;
   document.getElementById('trend-spent-sub').textContent = timeframeLabel;
@@ -253,10 +305,26 @@ function renderSparklines() {
 
 function processHistoryData() {
   const dataMap = {};
-  const { start } = getDateRange(dateRangeDays);
+  let start, end;
+
+  if (dateRangeDays === 'custom') {
+    start = new Date(customStartDate);
+    end = new Date(customEndDate);
+  } else {
+    const range = getDateRange(dateRangeDays);
+    start = range.start;
+    end = range.end;
+  }
+
+  // Calculate days diff
+  const diffTime = Math.abs(end - start);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+  // Cap chart points if range is huge to avoid performance issues
+  const step = diffDays > 60 ? Math.ceil(diffDays / 60) : 1;
 
   // Initialize map with all dates in range
-  for (let i = 0; i <= dateRangeDays; i++) {
+  for (let i = 0; i <= diffDays; i += step) {
     const d = new Date(start);
     d.setDate(d.getDate() + i);
     const dateStr = d.toISOString().split('T')[0];
@@ -304,7 +372,7 @@ export function renderCallsTable() {
   if (!tbody) return;
 
   if (currentCalls.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding: 4rem;">No call records found for this period</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted" style="padding: 4rem;">No call records found for this period</td></tr>';
     return;
   }
 
@@ -333,6 +401,18 @@ export function renderCallsTable() {
         <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
           ${call.transcript ? 'ANALYZE' : 'NO LOGS'}
         </button>
+      </td>
+      <td>
+        <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
+          ${call.transcript ? 'ANALYZE' : 'NO LOGS'}
+        </button>
+      </td>
+      <td>
+        ${window.appState.isAdmin() ? `
+        <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700; color: #ef4444; border-color: rgba(239, 68, 68, 0.3);" onclick="deleteCall('${call.call_id}')">
+          DELETE
+        </button>
+        ` : ''}
       </td>
     </tr>
   `).join('');
@@ -363,9 +443,82 @@ function subscribeToCallUpdates() {
 }
 
 // Global window functions for event handlers
-window.handleDateRangeChange = function (days) {
-  dateRangeDays = parseInt(days);
+window.handleDateRangeChange = function (value) {
+  const customInputs = document.getElementById('custom-date-inputs');
+
+  if (value === 'custom') {
+    dateRangeDays = 'custom';
+    customInputs.classList.remove('hidden');
+    customInputs.style.display = 'flex'; // Ensure flex display
+  } else {
+    dateRangeDays = parseInt(value);
+    customInputs.classList.add('hidden');
+    customInputs.style.display = 'none';
+    loadCalls();
+  }
+};
+
+window.applyCustomDateRange = function () {
+  const startVal = document.getElementById('start-date').value;
+  const endVal = document.getElementById('end-date').value;
+
+  if (!startVal || !endVal) {
+    showToast('Please select both start and end dates', 'error');
+    return;
+  }
+
+  const start = new Date(startVal);
+  const end = new Date(endVal);
+
+  if (start > end) {
+    showToast('Start date must be before end date', 'error');
+    return;
+  }
+
+  customStartDate = start;
+  customEndDate = end;
   loadCalls();
+};
+
+window.deleteCall = function (callId) {
+  const modal = document.getElementById('confirm-modal');
+  const confirmBtn = document.getElementById('confirm-btn');
+  const message = document.getElementById('confirm-message');
+
+  message.textContent = 'Are you sure you want to delete this call record? This action cannot be undone.';
+
+  confirmBtn.onclick = async function () {
+    confirmBtn.disabled = true;
+    confirmBtn.textContent = 'Deleting...';
+
+    try {
+      const { error } = await window.supabaseClient
+        .from('calls')
+        .delete()
+        .eq('call_id', callId);
+
+      if (error) throw error;
+
+      showToast('Call record deleted', 'success');
+      currentCalls = currentCalls.filter(c => c.call_id !== callId);
+      updateMetrics();
+      renderCallsTable();
+      closeConfirmModal();
+    } catch (error) {
+      showToast('Failed to delete call: ' + error.message, 'error');
+    } finally {
+      confirmBtn.disabled = false;
+      confirmBtn.textContent = 'Delete Record';
+    }
+  };
+
+  modal.classList.remove('hidden');
+};
+
+window.closeConfirmModal = function (event) {
+  if (!event || event.target.classList.contains('modal-overlay') || event.target.classList.contains('btn-cancel')) {
+    document.getElementById('confirm-modal').classList.add('hidden');
+  }
 };
 
 let wavesurfer = null;

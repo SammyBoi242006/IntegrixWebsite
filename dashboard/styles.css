@@ -519,6 +519,42 @@ textarea:focus {
   max-height: 85vh;
   overflow-y: auto;
   box-shadow: var(--card-shadow);
+  position: relative;
+}
+
+.modal-confirm {
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal-actions {
+  display: flex;
+  gap: var(--gap-md);
+  margin-top: var(--gap-xl);
+  justify-content: center;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+  border: none;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.btn-cancel {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.btn-cancel:hover {
+  background: var(--bg-hover);
+  border-color: var(--text-secondary);
 }
 
 /* Filters */
@@ -558,12 +594,104 @@ textarea:focus {
   display: none;
 }
 
+
 /* Campaigns Page Specifics */
 .upload-area:hover {
   border-color: var(--color-coral) !important;
   background: rgba(255, 107, 107, 0.05) !important;
   transform: translateY(-2px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced Filter Styles */
+#date-range {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a0a0a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  padding: 10px 48px 10px 20px;
+  cursor: pointer;
+  border-radius: 100px;
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 13px;
+  height: 42px;
+  /* Match button height */
+}
+
+#date-range:hover {
+  border-color: var(--text-secondary);
+}
+
+#date-range:focus {
+  border-color: var(--color-coral);
+  outline: none;
+}
+
+select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  padding: 10px;
+}
+
+#custom-date-inputs input[type="datetime-local"] {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  padding: 10px 20px;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  height: 42px;
+  width: 100%;
+  cursor: text;
+  transition: all 0.3s ease;
+}
+
+#custom-date-inputs input[type="datetime-local"]:hover {
+  border-color: var(--text-secondary);
+}
+
+#custom-date-inputs input[type="datetime-local"]:focus {
+  border-color: var(--color-coral);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+/* Remove calendar icon in some browsers to keep it clean if desired, or style it */
+#custom-date-inputs input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  /* Adjust icon color for dark mode */
+  cursor: pointer;
+}
+
+
+#custom-date-inputs .btn-primary {
+  background: linear-gradient(135deg, var(--color-coral), #ff8f8f);
+  color: #ffffff !important;
+  /* Force white text */
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  border-radius: 100px;
+  /* Match dropdown */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#custom-date-inputs .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  filter: brightness(1.1);
+  color: #ffffff !important;
 }
 
 .pulse-ring {

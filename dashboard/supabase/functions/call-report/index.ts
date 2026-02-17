@@ -116,13 +116,22 @@ serve(async (req) => {
     const durationSeconds = Math.round(message.durationSeconds || call.durationSeconds || payload.durationSeconds || 0);
     const costUsd = message.cost || call.cost || payload.cost || 0;
 
+    // Extract campaignId from customer metadata
+    const campaignId =
+      message.customer?.metadata?.campaignId ||
+      call.customer?.metadata?.campaignId ||
+      payload.customer?.metadata?.campaignId ||
+      variables.customer?.metadata?.campaignId ||
+      null;
+
     console.log("Extracted Data:", {
       orgIdFound: !!orgId,
       orgId: orgId,
       callType,
       vapiCallId,
       assistantName,
-      hasRecording: !!recordingUrl
+      hasRecording: !!recordingUrl,
+      campaignId
     });
 
     // FILTER: Only process the final report to avoid duplicate records for one call
@@ -193,6 +202,7 @@ serve(async (req) => {
         user_id: profile.id,
         org_id: orgId,
         vapi_call_id: vapiCallId,
+        campaign_id: campaignId, // Add campaign_id here
         assistant_name: assistantName,
         assistant_phone_number: assistantPhoneNumber,
         customer_phone_number: customerPhoneNumber,

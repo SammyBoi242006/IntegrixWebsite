@@ -12,27 +12,45 @@ serve(async (req) => {
   }
 
   try {
-    const { phoneNumber, assistantId, phoneNumberId, apiKey, userId } = await req.json();
+    const { phoneNumber, assistantId, phoneNumberId, apiKey, userId, orgId, campaignId } = await req.json();
 
     if (!phoneNumber || !assistantId || !apiKey) {
+      console.error("Missing required parameters:", { phoneNumber: !!phoneNumber, assistantId: !!assistantId, apiKey: !!apiKey });
       return new Response(
         JSON.stringify({ error: "Missing required parameters" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
+    console.log(`Triggering call for ${phoneNumber} using assistant ${assistantId}...`);
+
     // Call VAPI API
+    const vapiHeaders: Record<string, string> = {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    };
+
+    if (orgId) {
+      vapiHeaders["x-vapi-org-id"] = orgId;
+    }
+
+    // Attach campaignId to the call using custom headers or metadata if VAPI supports it in headers?
+    // Better to put it in the body as assistant overrides or customer metadata.
+    // We will use customer.metadata to store campaignId safely.
+
+    // Note: VAPI supports 'customer' object with 'metadata'.
+
     const response = await fetch("https://api.vapi.ai/call", {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
+      headers: vapiHeaders,
       body: JSON.stringify({
         assistantId: assistantId,
         phoneNumberId: phoneNumberId,
         customer: {
           number: phoneNumber,
+          metadata: {
+            campaignId: campaignId
+          }
         },
       }),
     });
@@ -40,9 +58,13 @@ serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("VAPI API Error:", data);
+      console.error("VAPI API Error Details:", JSON.stringify(data, null, 2));
       return new Response(
-        JSON.stringify({ error: "VAPI API Error", details: data }),
+        JSON.stringify({
+          error: "VAPI API Error",
+          message: data.message || "Unknown VAPI error",
+          details: data
+        }),
         { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }

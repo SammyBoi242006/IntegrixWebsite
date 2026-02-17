@@ -11,29 +11,36 @@ serve(async (req) => {
   }
 
   try {
-    const { contacts, assistantId, phoneNumberId, apiKey, name, scheduledAt } = await req.json();
+    const { contacts, assistantId, phoneNumberId, apiKey, name, scheduledAt, orgId } = await req.json();
 
     if (!contacts || !assistantId || !apiKey) {
+      console.error("Missing required parameters:", { contacts: !!contacts, assistantId: !!assistantId, apiKey: !!apiKey });
       return new Response(
         JSON.stringify({ error: "Missing required parameters (contacts, assistantId, apiKey)" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Create a VAPI Campaign
-    // Based on https://docs.vapi.ai/api-reference/campaigns/campaign-controller-create
+    console.log(`Scheduling campaign "${name}" for ${contacts.length} contacts...`);
+
+    // Call VAPI API
+    const vapiHeaders: Record<string, string> = {
+      "Authorization": `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    };
+
+    if (orgId) {
+      vapiHeaders["x-vapi-org-id"] = orgId;
+    }
+
     const response = await fetch("https://api.vapi.ai/campaign", {
       method: "POST",
-      headers: {
-        "Authorization": `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
+      headers: vapiHeaders,
       body: JSON.stringify({
         name: name || `Campaign - ${new Date().toISOString()}`,
         assistantId: assistantId,
         phoneNumberId: phoneNumberId,
         customers: contacts.map((phone: string) => ({ number: phone })),
-        // Include scheduledAt if provided
         ...(scheduledAt && { scheduledAt })
       }),
     });
@@ -41,9 +48,13 @@ serve(async (req) => {
     const data = await response.json();
 
     if (!response.ok) {
-      console.error("VAPI Campaign Error:", data);
+      console.error("VAPI Campaign Error Details:", JSON.stringify(data, null, 2));
       return new Response(
-        JSON.stringify({ error: "VAPI Campaign API Error", details: data }),
+        JSON.stringify({
+          error: "VAPI Campaign API Error",
+          message: data.message || "Unknown VAPI error",
+          details: data
+        }),
         { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }

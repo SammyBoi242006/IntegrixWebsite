@@ -2,3 +2,9 @@
 
 [functions.call-report]
 verify_jwt = false  # Disable JWT verification for webhook endpoint
+
+[functions.campaign-start]
+verify_jwt = false
+
+[functions.campaign-schedule]
+verify_jwt = false
