@@ -32,8 +32,8 @@ export function formatDuration(seconds) {
 
 // Format currency
 export function formatCurrency(amount) {
-  if (amount === null || amount === undefined) return '$0.00';
-  return `$${parseFloat(amount).toFixed(2)}`;
+  if (amount === null || amount === undefined) return '₹0.00';
+  return `₹${parseFloat(amount).toFixed(2)}`;
 }
 
 // Format large numbers with commas

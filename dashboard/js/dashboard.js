@@ -228,10 +228,14 @@ async function loadCalls() {
 // Update metrics and charts
 function updateMetrics() {
   const totalMinutes = currentCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0) / 60;
-  const totalCost = currentCalls.reduce((sum, call) => sum + parseFloat(call.cost_usd || 0), 0);
+  // Calculate cost at 22 Rupees per minute
+  const totalCost = totalMinutes * 22;
   const avgCost = currentCalls.length > 0 ? totalCost / currentCalls.length : 0;
 
-  document.getElementById('metric-minutes').textContent = formatNumber(totalMinutes);
+  const userProfile = window.appState.getUserProfile();
+  const minuteLimit = userProfile?.total_minutes_limit || 100;
+
+  document.getElementById('metric-minutes').textContent = `${formatNumber(totalMinutes)} / ${minuteLimit}`;
   document.getElementById('metric-count').textContent = formatNumber(currentCalls.length);
   document.getElementById('metric-spent').textContent = formatCurrency(totalCost);
   document.getElementById('metric-avg').textContent = formatCurrency(avgCost);

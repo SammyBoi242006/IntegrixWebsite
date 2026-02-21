@@ -36,6 +36,7 @@ export function renderAdmin() {
                 <th>Email</th>
                 <th>Display Name</th>
                 <th>Organization ID</th>
+                <th>Minutes Limit</th>
                 <th>Created</th>
                 <th>Actions</th>
               </tr>
@@ -89,14 +90,14 @@ export function renderAdmin() {
       </div>
     </div>
     
-    <!-- Edit Org ID Modal -->
-    <div id="edit-org-modal" class="modal-overlay hidden" onclick="closeEditOrgModal(event)">
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="modal-overlay hidden" onclick="closeEditUserModal(event)">
       <div class="modal" onclick="event.stopPropagation()">
         <div class="modal-header">
-          <h2 class="modal-title">Edit Organization ID</h2>
-          <button class="modal-close" onclick="closeEditOrgModal()">&times;</button>
+          <h2 class="modal-title">Edit User Details</h2>
+          <button class="modal-close" onclick="closeEditUserModal()">&times;</button>
         </div>
-        <form id="edit-org-form">
+        <form id="edit-user-form">
           <div class="form-group">
             <label for="edit-email">User Email</label>
             <input type="text" id="edit-email" disabled>
@@ -104,6 +105,10 @@ export function renderAdmin() {
           <div class="form-group">
             <label for="edit-org-id">Organization ID</label>
             <input type="text" id="edit-org-id" placeholder="Enter VAPI org_id">
+          </div>
+          <div class="form-group">
+            <label for="edit-minutes-limit">Total Minutes Limit</label>
+            <input type="number" id="edit-minutes-limit" placeholder="100">
           </div>
           <input type="hidden" id="edit-user-id">
           <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -117,7 +122,7 @@ export function renderAdmin() {
   loadAllCalls();
 
   // Handle edit form submission
-  document.getElementById('edit-org-form').addEventListener('submit', handleOrgIdUpdate);
+  document.getElementById('edit-user-form').addEventListener('submit', handleUserUpdate);
 
   // Handle filtering
   const searchInput = document.getElementById('admin-search-calls');
@@ -172,10 +177,11 @@ function renderUsersTable() {
           </code>
         ` : '<span class="text-muted">Not set</span>'}
       </td>
+      <td style="font-weight: 600;">${user.total_minutes_limit || 100} min</td>
       <td>${formatDate(user.created_at)}</td>
       <td>
-        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="editOrgId('${user.id}', '${user.email}', '${user.org_id || ''}')">
-          Edit Org ID
+        <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="editUser('${user.id}', '${user.email}', '${user.org_id || ''}', ${user.total_minutes_limit || 100})">
+          Edit
         </button>
       </td>
     </tr>
@@ -279,39 +285,44 @@ function renderAllCallsTable(searchTerm = '', orgId = '', assistantName = '') {
   `).join('');
 }
 
-// Edit org ID
-window.editOrgId = function (userId, email, currentOrgId) {
+// Edit User
+window.editUser = function (userId, email, currentOrgId, minutesLimit) {
   document.getElementById('edit-user-id').value = userId;
   document.getElementById('edit-email').value = email;
   document.getElementById('edit-org-id').value = currentOrgId;
-  document.getElementById('edit-org-modal').classList.remove('hidden');
+  document.getElementById('edit-minutes-limit').value = minutesLimit || 100;
+  document.getElementById('edit-user-modal').classList.remove('hidden');
 };
 
 // Close edit modal
-window.closeEditOrgModal = function (event) {
+window.closeEditUserModal = function (event) {
   if (!event || event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close')) {
-    document.getElementById('edit-org-modal').classList.add('hidden');
+    document.getElementById('edit-user-modal').classList.add('hidden');
   }
 };
 
-// Handle org ID update
-async function handleOrgIdUpdate(e) {
+// Handle user update
+async function handleUserUpdate(e) {
   e.preventDefault();
 
   const userId = document.getElementById('edit-user-id').value;
   const newOrgId = document.getElementById('edit-org-id').value;
+  const newMinutesLimit = parseInt(document.getElementById('edit-minutes-limit').value);
 
   const { error } = await window.supabaseClient
     .from('profiles')
-    .update({ org_id: newOrgId || null })
+    .update({
+      org_id: newOrgId || null,
+      total_minutes_limit: newMinutesLimit
+    })
     .eq('id', userId);
 
   if (error) {
-    showToast('Failed to update org ID: ' + error.message, 'error');
+    showToast('Failed to update user: ' + error.message, 'error');
     return;
   }
 
-  showToast('Organization ID updated successfully!', 'success');
-  closeEditOrgModal();
+  showToast('User details updated successfully!', 'success');
+  closeEditUserModal();
   loadUsers();
 }

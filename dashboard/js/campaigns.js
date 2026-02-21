@@ -210,6 +210,8 @@ export function renderCampaigns() {
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
     <!-- Delete Confirmation Modal -->
     <div id="confirm-modal" class="modal-overlay hidden" onclick="closeConfirmModal(event)">
       <div class="modal modal-confirm" onclick="event.stopPropagation()">
