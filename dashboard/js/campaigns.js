@@ -399,7 +399,7 @@ async function processNextCall() {
     if (!session) throw new Error('No active session');
 
     // Call real Edge Function with Auth headers via official invoke method
-    const { data, error: invokeError } = await window.supabaseClient.functions.invoke('campaign-start', {
+    const { data: responseData, error: invokeError } = await window.supabaseClient.functions.invoke('campaign-start', {
       body: {
         phoneNumber,
         assistantId: vapiConfig.assistantId,
@@ -411,8 +411,20 @@ async function processNextCall() {
       }
     });
 
-    if (invokeError) {
-      throw new Error(invokeError.message || 'Failed to trigger call');
+    if (invokeError || responseData?.error) {
+      console.error('Campaign Launch Error:', invokeError || responseData);
+      let msg = invokeError?.message || responseData?.message || responseData?.error || 'Failed to trigger call';
+
+      // If it's a Supabase error with context, try to parse JSON body
+      if (invokeError?.context && typeof invokeError.context.json === 'function') {
+        try {
+          const body = await invokeError.context.json();
+          if (body.message) msg = body.message;
+          else if (body.error) msg = typeof body.error === 'string' ? body.error : body.error.message || msg;
+        } catch (e) { }
+      }
+
+      throw new Error(msg);
     }
 
     // Call triggered successfully, updating UI to ringing
@@ -428,7 +440,7 @@ async function processNextCall() {
       duration: 'Pending...',
       timestamp: new Date().toISOString(),
       outcome: 'Success',
-      campaignId: data.callId ? 'VAPI-' + data.callId.slice(-6) : 'N/A'
+      campaignId: responseData?.callId ? 'VAPI-' + responseData.callId.slice(-6) : 'N/A'
     };
 
     campaignState.results.unshift(result);

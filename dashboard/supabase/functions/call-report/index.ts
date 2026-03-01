@@ -116,8 +116,11 @@ serve(async (req) => {
     const durationSeconds = Math.round(message.durationSeconds || call.durationSeconds || payload.durationSeconds || 0);
     const costUsd = message.cost || call.cost || payload.cost || 0;
 
-    // Extract campaignId from customer metadata
+    // Robust extraction of campaignId from various potential VAPI payload paths
     const campaignId =
+      message.metadata?.campaignId ||
+      call.metadata?.campaignId ||
+      payload.metadata?.campaignId ||
       message.customer?.metadata?.campaignId ||
       call.customer?.metadata?.campaignId ||
       payload.customer?.metadata?.campaignId ||

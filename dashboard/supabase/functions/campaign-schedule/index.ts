@@ -11,7 +11,7 @@ serve(async (req) => {
   }
 
   try {
-    const { contacts, assistantId, phoneNumberId, apiKey, name, scheduledAt, orgId } = await req.json();
+    const { contacts, assistantId, phoneNumberId, apiKey, name, scheduledAt, orgId, campaignId } = await req.json();
 
     if (!contacts || !assistantId || !apiKey) {
       console.error("Missing required parameters:", { contacts: !!contacts, assistantId: !!assistantId, apiKey: !!apiKey });
@@ -40,7 +40,10 @@ serve(async (req) => {
         name: name || `Campaign - ${new Date().toISOString()}`,
         assistantId: assistantId,
         phoneNumberId: phoneNumberId,
-        customers: contacts.map((phone: string) => ({ number: phone })),
+        customers: contacts.map((phone: string) => ({
+          number: phone,
+          metadata: { campaignId: campaignId }
+        })),
         ...(scheduledAt && { scheduledAt })
       }),
     });

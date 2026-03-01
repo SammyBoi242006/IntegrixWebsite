@@ -34,38 +34,45 @@ serve(async (req) => {
       vapiHeaders["x-vapi-org-id"] = orgId;
     }
 
-    // Attach campaignId to the call using custom headers or metadata if VAPI supports it in headers?
-    // Better to put it in the body as assistant overrides or customer metadata.
-    // We will use customer.metadata to store campaignId safely.
+    // Build VAPI payload
+    const vapiPayload: any = {
+      assistantId: assistantId,
+      customer: {
+        number: phoneNumber
+      },
+      metadata: {
+        campaignId: campaignId
+      }
+    };
 
-    // Note: VAPI supports 'customer' object with 'metadata'.
+    if (phoneNumberId) {
+      vapiPayload.phoneNumberId = phoneNumberId;
+    }
+
+    console.log(`Sending request to VAPI for ${phoneNumber}...`);
 
     const response = await fetch("https://api.vapi.ai/call", {
       method: "POST",
       headers: vapiHeaders,
-      body: JSON.stringify({
-        assistantId: assistantId,
-        phoneNumberId: phoneNumberId,
-        customer: {
-          number: phoneNumber,
-          metadata: {
-            campaignId: campaignId
-          }
-        },
-      }),
+      body: JSON.stringify(vapiPayload),
     });
 
     const data = await response.json();
 
     if (!response.ok) {
       console.error("VAPI API Error Details:", JSON.stringify(data, null, 2));
+
+      const errorMessage = data.message || (data.error && typeof data.error === 'string' ? data.error : "Unknown VAPI error");
+
       return new Response(
         JSON.stringify({
+          success: false,
           error: "VAPI API Error",
-          message: data.message || "Unknown VAPI error",
+          message: errorMessage,
+          vapiStatus: response.status,
           details: data
         }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -77,8 +84,13 @@ serve(async (req) => {
   } catch (error) {
     console.error("Unexpected error:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error", details: (error as Error).message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: false,
+        error: "Internal server error",
+        message: (error as Error).message,
+        details: error
+      }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });
