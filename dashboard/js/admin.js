@@ -76,13 +76,13 @@ export function renderAdmin() {
                 <th>Assistant</th>
                 <th>Customer</th>
                 <th>Duration</th>
-                <th>Cost</th>
                 <th>Status</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody id="all-calls-table-body">
               <tr>
-                <td colspan="7" class="text-center">Loading calls...</td>
+              <td colspan="6" class="text-center">Loading calls...</td>
               </tr>
             </tbody>
           </table>
@@ -231,7 +231,7 @@ function renderAllCallsTable(searchTerm = '', orgId = '', assistantName = '') {
   const tbody = document.getElementById('all-calls-table-body');
 
   if (allCalls.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No calls found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No calls found</td></tr>';
     return;
   }
 
@@ -255,7 +255,7 @@ function renderAllCallsTable(searchTerm = '', orgId = '', assistantName = '') {
   });
 
   if (filteredCalls.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding: 2rem;">No matches found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted" style="padding: 2rem;">No matches found</td></tr>';
     return;
   }
 
@@ -271,7 +271,6 @@ function renderAllCallsTable(searchTerm = '', orgId = '', assistantName = '') {
       </td>
       <td style="font-family: monospace;">${call.customer_phone_number || 'N/A'}</td>
       <td><span class="badge" style="background: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border-color);">${formatDuration(call.duration_seconds)}</span></td>
-      <td style="font-weight: 600;">${formatCurrency(call.cost_usd)}</td>
       <td>
         <span class="badge" style="
           background: ${call.ended_reason === 'customer-ended-call' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'};
@@ -280,6 +279,18 @@ function renderAllCallsTable(searchTerm = '', orgId = '', assistantName = '') {
         ">
           ${(call.ended_reason || 'Success').replace(/-/g, ' ')}
         </span>
+      </td>
+      <td>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
+            ANALYZE
+          </button>
+          ${call.recording_url ? `
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px; border-radius: 100px; font-weight: 700; color: var(--color-green); border-color: rgba(16, 185, 129, 0.3);" onclick="downloadRecording('${call.recording_url}', 'integrix-recording-${formatDateForFilename(call.start_time || call.created_at)}.mp3')">
+            DOWNLOAD
+          </button>
+          ` : ''}
+        </div>
       </td>
     </tr>
   `).join('');

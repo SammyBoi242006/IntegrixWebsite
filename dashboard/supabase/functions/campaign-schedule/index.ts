@@ -33,19 +33,41 @@ serve(async (req) => {
       vapiHeaders["x-vapi-org-id"] = orgId;
     }
 
+    // VAPI Scheduling logic
+    let earliestAt = scheduledAt || new Date().toISOString();
+    // Ensure accurate ISO string without fractional seconds
+    earliestAt = new Date(earliestAt).toISOString().split('.')[0] + 'Z';
+
+    // VAPI requires a latestAt time, and it MUST be within 1 hour of earliestAt
+    const latestAt = new Date(new Date(earliestAt).getTime() + 55 * 60 * 1000).toISOString().split('.')[0] + 'Z';
+
+    const vapiPayload: any = {
+      name: name || `Campaign - ${new Date().toISOString()}`,
+      assistantId: assistantId,
+      customers: contacts.map((phone: string) => ({
+        number: phone,
+        assistantOverrides: {
+          variableValues: {
+            campaignId: campaignId
+          }
+        }
+      })),
+      schedulePlan: {
+        earliestAt: earliestAt,
+        latestAt: latestAt
+      }
+    };
+
+    if (phoneNumberId) {
+      vapiPayload.phoneNumberId = phoneNumberId;
+    }
+
+    console.log("VAPI Project Payload (v4):", JSON.stringify(vapiPayload, null, 2));
+
     const response = await fetch("https://api.vapi.ai/campaign", {
       method: "POST",
       headers: vapiHeaders,
-      body: JSON.stringify({
-        name: name || `Campaign - ${new Date().toISOString()}`,
-        assistantId: assistantId,
-        phoneNumberId: phoneNumberId,
-        customers: contacts.map((phone: string) => ({
-          number: phone,
-          metadata: { campaignId: campaignId }
-        })),
-        ...(scheduledAt && { scheduledAt })
-      }),
+      body: JSON.stringify(vapiPayload),
     });
 
     const data = await response.json();
@@ -54,11 +76,12 @@ serve(async (req) => {
       console.error("VAPI Campaign Error Details:", JSON.stringify(data, null, 2));
       return new Response(
         JSON.stringify({
+          success: false,
           error: "VAPI Campaign API Error",
           message: data.message || "Unknown VAPI error",
           details: data
         }),
-        { status: response.status, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
@@ -73,8 +96,13 @@ serve(async (req) => {
   } catch (error) {
     console.error("Unexpected error:", error);
     return new Response(
-      JSON.stringify({ error: "Internal server error", details: (error as Error).message }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      JSON.stringify({
+        success: false,
+        error: "Internal server error",
+        message: (error as Error).message,
+        details: error
+      }),
+      { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
 });

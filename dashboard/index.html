@@ -61,7 +61,7 @@
   <script type="module">
     // Import all modules
     import { SUPABASE_CONFIG } from './js/config.js';
-    import { showToast, formatDate, formatDuration, formatCurrency, formatNumber, getDateRange } from './js/utils.js';
+    import { showToast, formatDate, formatDateForFilename, formatDuration, formatCurrency, formatNumber, getDateRange, downloadRecording } from './js/utils.js';
     import { renderLogin, renderSignup } from './js/auth.js';
     import { renderProfile } from './js/profile.js';
     import { renderDashboard, cleanupDashboard } from './js/dashboard.js';
@@ -75,10 +75,12 @@
     // Make utilities globally available
     window.showToast = showToast;
     window.formatDate = formatDate;
+    window.formatDateForFilename = formatDateForFilename;
     window.formatDuration = formatDuration;
     window.formatCurrency = formatCurrency;
     window.formatNumber = formatNumber;
     window.getDateRange = getDateRange;
+    window.downloadRecording = downloadRecording;
 
     // Theme Support Logic
     window.toggleTheme = function () {

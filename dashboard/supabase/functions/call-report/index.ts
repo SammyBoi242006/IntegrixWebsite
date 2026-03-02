@@ -123,8 +123,9 @@ serve(async (req) => {
       payload.metadata?.campaignId ||
       message.customer?.metadata?.campaignId ||
       call.customer?.metadata?.campaignId ||
-      payload.customer?.metadata?.campaignId ||
+      variables.campaignId || // Check variables at top level
       variables.customer?.metadata?.campaignId ||
+      variables.customer?.variables?.campaignId ||
       null;
 
     console.log("Extracted Data:", {

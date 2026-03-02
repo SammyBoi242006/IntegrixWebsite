@@ -72,26 +72,14 @@ export function renderDashboard() {
         </div>
         
         <div class="metric-card">
-          <div class="metric-label">Total Spent</div>
-          <div class="metric-value" id="metric-spent">-</div>
+          <div class="metric-label">Successful Calls</div>
+          <div class="metric-value" id="metric-success">-</div>
           <div class="sparkline-container">
-            <canvas id="chart-spent"></canvas>
+            <canvas id="chart-success"></canvas>
           </div>
           <div class="metric-trend">
-            <span>Investment</span>
-            <span id="trend-spent-sub">Loading...</span>
-          </div>
-        </div>
-        
-        <div class="metric-card">
-          <div class="metric-label">Efficiency (Avg)</div>
-          <div class="metric-value" id="metric-avg">-</div>
-          <div class="sparkline-container">
-            <canvas id="chart-avg"></canvas>
-          </div>
-          <div class="metric-trend">
-            <span>Cost Efficiency</span>
-            <span id="trend-avg-sub">Loading...</span>
+            <span>Customer Answered</span>
+            <span id="trend-success-sub">Loading...</span>
           </div>
         </div>
       </div>
@@ -106,7 +94,6 @@ export function renderDashboard() {
               <th>Assistant</th>
               <th>Customer</th>
               <th>Duration</th>
-              <th>Cost</th>
               <th>Outcome</th>
               <th>Details</th>
               <th>Actions</th>
@@ -114,7 +101,7 @@ export function renderDashboard() {
           </thead>
           <tbody id="calls-table-body">
             <tr>
-              <td colspan="8" class="text-center">Loading call records...</td>
+              <td colspan="7" class="text-center">Loading call records...</td>
             </tr>
           </tbody>
         </table>
@@ -145,6 +132,9 @@ export function renderDashboard() {
               <svg id="pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
             </button>
             <div id="audio-time" style="font-size: 12px; font-family: monospace; color: var(--text-secondary);">0:00 / 0:00</div>
+            <button id="modal-download-btn" class="btn-secondary" style="margin-left: auto; padding: 6px 12px; font-size: 12px; border-radius: 100px; font-weight: 700; color: var(--color-green); border-color: rgba(16, 185, 129, 0.3);">
+              DOWNLOAD RECORDING
+            </button>
           </div>
 
           <audio id="modal-audio-player" class="hidden">
@@ -228,17 +218,14 @@ async function loadCalls() {
 // Update metrics and charts
 function updateMetrics() {
   const totalMinutes = currentCalls.reduce((sum, call) => sum + (call.duration_seconds || 0), 0) / 60;
-  // Calculate cost at 22 Rupees per minute
-  const totalCost = totalMinutes * 22;
-  const avgCost = currentCalls.length > 0 ? totalCost / currentCalls.length : 0;
+  const successCount = currentCalls.filter(call => call.ended_reason === 'customer-ended-call').length;
 
   const userProfile = window.appState.getUserProfile();
   const minuteLimit = userProfile?.total_minutes_limit || 100;
 
   document.getElementById('metric-minutes').textContent = `${formatNumber(totalMinutes)} / ${minuteLimit}`;
   document.getElementById('metric-count').textContent = formatNumber(currentCalls.length);
-  document.getElementById('metric-spent').textContent = formatCurrency(totalCost);
-  document.getElementById('metric-avg').textContent = formatCurrency(avgCost);
+  document.getElementById('metric-success').textContent = formatNumber(successCount);
 
   // Update trend labels
   let timeframeLabel;
@@ -250,8 +237,7 @@ function updateMetrics() {
 
   document.getElementById('trend-minutes-sub').textContent = timeframeLabel;
   document.getElementById('trend-count-sub').textContent = timeframeLabel;
-  document.getElementById('trend-spent-sub').textContent = timeframeLabel;
-  document.getElementById('trend-avg-sub').textContent = timeframeLabel;
+  document.getElementById('trend-success-sub').textContent = timeframeLabel;
 
   // Process data for charts
   renderSparklines();
@@ -267,8 +253,7 @@ function renderSparklines() {
   const chartConfigs = [
     { id: 'chart-minutes', data: historyData.map(d => d.minutes), color: '#10b981' },
     { id: 'chart-count', data: historyData.map(d => d.count), color: '#3b82f6' },
-    { id: 'chart-spent', data: historyData.map(d => d.spent), color: '#8b5cf6' },
-    { id: 'chart-avg', data: historyData.map(d => d.avg), color: '#f59e0b' }
+    { id: 'chart-success', data: historyData.map(d => d.success), color: '#8b5cf6' }
   ];
 
   chartConfigs.forEach(config => {
@@ -332,7 +317,7 @@ function processHistoryData() {
     const d = new Date(start);
     d.setDate(d.getDate() + i);
     const dateStr = d.toISOString().split('T')[0];
-    dataMap[dateStr] = { minutes: 0, count: 0, spent: 0, avg: 0 };
+    dataMap[dateStr] = { minutes: 0, count: 0, success: 0 };
   }
 
   // Fill with actual data
@@ -341,7 +326,9 @@ function processHistoryData() {
     if (dataMap[dateStr]) {
       dataMap[dateStr].count += 1;
       dataMap[dateStr].minutes += (call.duration_seconds || 0) / 60;
-      dataMap[dateStr].spent += parseFloat(call.cost_usd || 0);
+      if (call.ended_reason === 'customer-ended-call') {
+        dataMap[dateStr].success += 1;
+      }
     }
   });
 
@@ -351,8 +338,7 @@ function processHistoryData() {
       date,
       count: day.count,
       minutes: day.minutes,
-      spent: day.spent,
-      avg: day.count > 0 ? day.spent / day.count : 0
+      success: day.success
     };
   });
 }
@@ -376,7 +362,7 @@ export function renderCallsTable() {
   if (!tbody) return;
 
   if (currentCalls.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted" style="padding: 4rem;">No call records found for this period</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding: 4rem;">No call records found for this period</td></tr>';
     return;
   }
 
@@ -391,7 +377,6 @@ export function renderCallsTable() {
       </td>
       <td style="color: var(--text-secondary); font-family: monospace;">${call.customer_phone_number || 'Restricted'}</td>
       <td><span class="badge" style="background: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border-color);">${formatDuration(call.duration_seconds)}</span></td>
-      <td style="font-weight: 600;">${formatCurrency(call.cost_usd)}</td>
       <td>
         <span class="badge" style="
           background: ${call.ended_reason === 'customer-ended-call' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'};
@@ -402,14 +387,16 @@ export function renderCallsTable() {
         </span>
       </td>
       <td>
-        <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
-          ${call.transcript ? 'ANALYZE' : 'NO LOGS'}
-        </button>
-      </td>
-      <td>
-        <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
-          ${call.transcript ? 'ANALYZE' : 'NO LOGS'}
-        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
+            ${call.transcript ? 'ANALYZE' : 'NO LOGS'}
+          </button>
+          ${call.recording_url ? `
+          <button class="btn-secondary" style="padding: 6px 14px; font-size: 11px; border-radius: 100px; font-weight: 700; color: var(--color-green); border-color: rgba(16, 185, 129, 0.3);" onclick="downloadRecording('${call.recording_url}', 'integrix-recording-${formatDateForFilename(call.start_time || call.created_at)}.mp3')">
+            DOWNLOAD
+          </button>
+          ` : ''}
+        </div>
       </td>
       <td>
         ${window.appState.isAdmin() ? `
@@ -586,6 +573,8 @@ window.viewTranscript = function (callId) {
 
     playBtn.onclick = () => wavesurfer.playPause();
 
+    document.getElementById('modal-download-btn').onclick = () => downloadRecording(call.recording_url, `integrix-recording-${formatDateForFilename(call.start_time || call.created_at)}.mp3`);
+
   } else {
     audioContainer.classList.add('hidden');
   }
@@ -616,12 +605,17 @@ window.closeTranscriptModal = function (event) {
 // Cleanup on route change
 export function cleanupDashboard() {
   window.removeEventListener('themechanged', handleThemeChange);
+
   if (callsSubscription) {
     callsSubscription.unsubscribe();
     callsSubscription = null;
   }
+
   // Cleanup charts
   Object.values(charts).forEach(chart => chart.destroy());
   charts = {};
 }
+
+// Global download function
+// Moved to utils.js and exposed in index.html
 

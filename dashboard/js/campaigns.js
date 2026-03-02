@@ -197,7 +197,6 @@ export function renderCampaigns() {
                 <th>Date & Time</th>
                 <th>Customer</th>
                 <th>Duration</th>
-                <th>Cost</th>
                 <th>Outcome</th>
                 <th>Details</th>
                  <th>Actions</th>
@@ -205,7 +204,7 @@ export function renderCampaigns() {
             </thead>
             <tbody id="campaign-calls-body">
               <tr>
-                <td colspan="7" class="text-center">Loading calls...</td>
+              <td colspan="6" class="text-center">Loading calls...</td>
               </tr>
             </tbody>
           </table>
@@ -578,8 +577,12 @@ async function scheduleCampaign() {
     return;
   }
 
-  const timestamp = new Date(`${date}T${time}`).getTime();
-  if (timestamp < Date.now()) {
+  // Force IST (UTC+5:30) offset
+  const istOffset = "+05:30";
+  const timestamp = new Date(`${date}T${time}:00${istOffset}`).toISOString();
+
+  // Check if scheduled time is in the future
+  if (new Date(timestamp) < new Date()) {
     showToast('Scheduled time must be in the future', 'error');
     return;
   }
@@ -606,10 +609,10 @@ async function scheduleCampaign() {
       .from('campaigns')
       .insert({
         user_id: user.id,
-        name: campaignState.campaignName || `Scheduled Campaign - ${new Date(timestamp).toLocaleString()}`,
+        name: campaignState.campaignName || `Scheduled Campaign - ${new Date(timestamp).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}`,
         status: 'scheduled',
         total_contacts: campaignState.contacts.length,
-        scheduled_at: new Date(timestamp).toISOString()
+        scheduled_at: timestamp
       })
       .select().single();
 
@@ -623,13 +626,27 @@ async function scheduleCampaign() {
         phoneNumberId: vapiConfig.phoneNumberId,
         apiKey: vapiConfig.apiKey,
         orgId: userProfile.org_id,
-        name: campaignState.campaignName || `Scheduled - ${date} ${time}`,
-        scheduledAt: new Date(timestamp).toISOString(),
+        name: campaignState.campaignName || `Scheduled - ${date} ${time} IST`,
+        scheduledAt: timestamp,
         campaignId: insertedCampaign.id
       }
     });
 
-    if (invokeError) throw new Error(invokeError.message || 'Failed to schedule');
+    if (invokeError || data?.success === false) {
+      console.error('Schedule Error Details:', invokeError || data);
+      let msg = invokeError?.message || data?.message || data?.error || 'Failed to schedule';
+
+      // Detailed error parsing similar to campaign-start
+      if (invokeError?.context && typeof invokeError.context.json === 'function') {
+        try {
+          const body = await invokeError.context.json();
+          if (body.message) msg = body.message;
+          else if (body.error) msg = typeof body.error === 'string' ? body.error : body.error.message || msg;
+        } catch (e) { }
+      }
+
+      throw new Error(msg);
+    }
 
     showToast(`Campaign scheduled successfully! ID: ${data.campaignId}`, 'success');
     loadCampaignHistory(); // Refresh history
@@ -727,7 +744,7 @@ window.viewCampaignDetails = async function (campaignId, campaignName) {
   document.getElementById('campaign-modal-subtitle').textContent = `Showing ${calls.length} calls related to this campaign`;
 
   if (calls.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted" style="padding: 2rem;">No calls recorded for this campaign yet.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted" style="padding: 2rem;">No calls recorded for this campaign yet.</td></tr>';
     return;
   }
 
@@ -736,7 +753,6 @@ window.viewCampaignDetails = async function (campaignId, campaignName) {
       <td style="font-weight: 500;">${formatDate(call.start_time || call.created_at)}</td>
       <td style="color: var(--text-secondary); font-family: monospace;">${call.customer_phone_number || 'Restricted'}</td>
       <td><span class="badge" style="background: var(--bg-hover); color: var(--text-primary); border: 1px solid var(--border-color);">${formatDuration(call.duration_seconds)}</span></td>
-      <td style="font-weight: 600;">${formatCurrency(call.cost_usd)}</td>
       <td>
         <span class="badge" style="
           background: ${call.ended_reason === 'customer-ended-call' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(245, 158, 11, 0.1)'};
@@ -747,9 +763,16 @@ window.viewCampaignDetails = async function (campaignId, campaignName) {
         </span>
       </td>
       <td>
-        <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
-          ANALYZE
-        </button>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px; border-radius: 100px; font-weight: 700;" onclick="viewTranscript('${call.call_id}')">
+            ANALYZE
+          </button>
+          ${call.recording_url ? `
+          <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px; border-radius: 100px; font-weight: 700; color: var(--color-green); border-color: rgba(16, 185, 129, 0.3);" onclick="downloadRecording('${call.recording_url}', 'integrix-recording-${formatDateForFilename(call.start_time || call.created_at)}.mp3')">
+            DOWNLOAD
+          </button>
+          ` : ''}
+        </div>
       </td>
       <td>
         ${window.appState.isAdmin() ? `
