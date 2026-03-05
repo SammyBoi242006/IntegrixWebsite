@@ -594,6 +594,60 @@ textarea:focus {
   display: none;
 }
 
+/* Premium Input Styles */
+.premium-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.premium-input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.premium-input {
+  width: 100%;
+  padding: 10px 16px 10px 42px !important;
+  /* Extra padding for icon */
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  /* Modern rounded look */
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 13px;
+  height: 42px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+}
+
+.premium-input:hover {
+  border-color: var(--text-secondary);
+  background: var(--bg-hover);
+}
+
+.premium-input:focus {
+  border-color: var(--color-coral);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.1);
+}
+
+/* Dark mode adjustments for date/time picker icons */
+[data-theme="dark"] .premium-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+}
+
+[data-theme="light"] .premium-input::-webkit-calendar-picker-indicator {
+  filter: invert(0.2);
+  cursor: pointer;
+}
+
 
 /* Campaigns Page Specifics */
 .upload-area:hover {

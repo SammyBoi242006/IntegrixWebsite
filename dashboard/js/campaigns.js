@@ -74,14 +74,24 @@ export function renderCampaigns() {
                 <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-blue);"></span>
                 Schedule for later
               </h3>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
                 <div>
-                  <label style="font-size: 11px;">Date</label>
-                  <input type="date" id="schedule-date" style="padding: 8px;">
+                  <label style="font-size: 11px; font-weight: 700; margin-bottom: 6px;">Date</label>
+                  <div class="premium-input-container">
+                    <span class="premium-input-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                    </span>
+                    <input type="date" id="schedule-date" class="premium-input">
+                  </div>
                 </div>
                 <div>
-                  <label style="font-size: 11px;">Time</label>
-                  <input type="time" id="schedule-time" style="padding: 8px;">
+                  <label style="font-size: 11px; font-weight: 700; margin-bottom: 6px;">Time</label>
+                  <div class="premium-input-container">
+                    <span class="premium-input-icon">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </span>
+                    <input type="time" id="schedule-time" class="premium-input">
+                  </div>
                 </div>
               </div>
               <button id="schedule-btn" class="btn btn-secondary" style="width: 100%;" disabled>Schedule Campaign</button>

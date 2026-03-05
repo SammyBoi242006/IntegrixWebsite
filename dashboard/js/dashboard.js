@@ -108,43 +108,8 @@ export function renderDashboard() {
       </div>
     </div>
     
-    <!-- Transcript Modal -->
-    <div id="transcript-modal" class="modal-overlay hidden" onclick="closeTranscriptModal(event)">
-      <div class="modal" onclick="event.stopPropagation()">
-        <div class="modal-header">
-          <h2 class="modal-title">Interaction Record</h2>
-          <button class="modal-close" onclick="closeTranscriptModal()">&times;</button>
-        </div>
-        
-        <!-- Audio Player Section -->
-        <div id="audio-player-container" style="margin-bottom: 24px; padding: 20px; background: var(--bg-hover); border-radius: var(--radius-lg); border: 1px solid var(--border-color);" class="hidden">
-          <div style="font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-            Interaction Recording
-          </div>
-          
-          <!-- Waveform Container -->
-          <div id="waveform" style="margin-bottom: 16px;"></div>
-          
-          <div style="display: flex; align-items: center; gap: 16px;">
-            <button id="play-pause" class="btn-secondary" style="width: 36px; height: 36px; border-radius: 50%; padding: 0; display: flex; align-items: center; justify-content: center;">
-              <svg id="play-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"></path></svg>
-              <svg id="pause-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="hidden"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path></svg>
-            </button>
-            <div id="audio-time" style="font-size: 12px; font-family: monospace; color: var(--text-secondary);">0:00 / 0:00</div>
-            <button id="modal-download-btn" class="btn-secondary" style="margin-left: auto; padding: 6px 12px; font-size: 12px; border-radius: 100px; font-weight: 700; color: var(--color-green); border-color: rgba(16, 185, 129, 0.3);">
-              DOWNLOAD RECORDING
-            </button>
-          </div>
-
-          <audio id="modal-audio-player" class="hidden">
-            Your browser does not support the audio element.
-          </audio>
-        </div>
-
-        <div id="transcript-content" style="white-space: pre-wrap; line-height: 1.8; color: var(--text-secondary); font-size: 15px;"></div>
-      </div>
-    </div>
+    
+    <!-- Delete Confirmation Modal (kept here as it's specific to dashboard for now) -->
 
     <!-- Delete Confirmation Modal -->
     <div id="confirm-modal" class="modal-overlay hidden" onclick="closeConfirmModal(event)">
@@ -514,16 +479,31 @@ window.closeConfirmModal = function (event) {
 
 let wavesurfer = null;
 
-window.viewTranscript = function (callId) {
-  const call = currentCalls.find(c => c.call_id === callId);
-  if (!call) return;
+window.viewTranscript = async function (callId) {
+  let call = currentCalls.find(c => c.call_id === callId);
+
+  if (!call) {
+    // Show loading state or similar if needed
+    // Fetch from Supabase if not in current dashboard view (e.g., from Campaigns page)
+    const { data, error } = await window.supabaseClient
+      .from('calls')
+      .select('*')
+      .eq('call_id', callId)
+      .single();
+
+    if (error || !data) {
+      showToast('Could not find call details', 'error');
+      return;
+    }
+    call = data;
+  }
 
   // Handle Transcript
   document.getElementById('transcript-content').textContent = call.transcript || 'No transcript available for this call.';
 
   // Handle Audio Player & Waveform
   const audioContainer = document.getElementById('audio-player-container');
-  const audioPlayer = document.getElementById('modal-audio-player');
+  // const audioPlayer = document.getElementById('modal-audio-player'); // Unused in original code but kept for reference
   const timeDisplay = document.getElementById('audio-time');
   const playBtn = document.getElementById('play-pause');
   const playIcon = document.getElementById('play-icon');
