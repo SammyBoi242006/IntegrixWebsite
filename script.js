@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5678/webhook/discovery-call",
+        "http://localhost:3000/send-email",
         {
           method: "POST",
           headers: {
