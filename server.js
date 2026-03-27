@@ -1,13 +1,14 @@
 const http = require('http');
 const nodemailer = require('nodemailer');
+require('dotenv').config();
 
 const PORT = 3000;
 
 // Replace these with your actual SMTP credentials
 const SMTP_HOST = 'smtp.gmail.com';
 const SMTP_PORT = 587;
-const SMTP_USER = 'your-email@gmail.com';
-const SMTP_PASS = 'your-app-password';
+const SMTP_USER = 'contact@integrixai.me';
+const SMTP_PASS = process.env.GMAIL;
 
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,

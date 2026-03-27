@@ -1,555 +1,507 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrix AI — AI that works while you don't.</title>
+    <meta name="description" content="Integrix builds AI calling agents, video ad systems, and automation pipelines for modern businesses.">
+    
+    <!-- Preload Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&family=Inter:ital,wght@0,400..800;1,400..800&family=JetBrains+Mono:wght@500&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&family=Inter:ital,wght@0,400..800;1,400..800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicon/site.webmanifest">
+    <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
 
-  <meta property="og:title" content="Integrix AI">
-  <meta property="og:description" content="AI systems that scale businesses">
-  <meta property="og:image" content="https://integrix.in/assets/og-image.png">
-  <meta property="og:url" content="https://integrix.in">
-  <meta property="og:type" content="website">
-
-  <title>Integrix</title>
-  <link rel="stylesheet" href="button_style.css">
-  <link rel="stylesheet" href="style.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-
-  <!-- Favicons & App Icons -->
-  <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicon/favicon-16x16.png">
-  <link rel="shortcut icon" href="/assets/favicon/favicon.ico">
-  <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="/assets/favicon/android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="/assets/favicon/android-chrome-512x512.png">
-
-  <link rel="manifest" href="/assets/favicon/site.webmanifest">
-  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@300,400,900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600&display=swap" rel="stylesheet" />
-
+    <!-- CSS -->
+    <link rel="stylesheet" href="index.css">
+    
+    <!-- Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/CustomEase.min.js" defer></script>
+    <!-- Note: SplitText is a GSAP Club plugin, but we use the provided CDN in the prompt context -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/SplitText.min.js" defer></script>
+    <script src="https://unpkg.com/lenis@1.1.14/dist/lenis.min.js" defer></script>
+    <script src="https://unpkg.com/split-type" defer></script>
 </head>
-
 <body>
 
+    <!-- Custom Cursor -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-ring"><span class="cursor-text">LET'S GO</span></div>
 
-  <!-- GLOBAL LOADER -->
-  <div id="global-loader">
-    <div class="loader-i">
-      <span class="dot"></span>
-      <span class="stem"></span>
-    </div>
-  </div>
-  <!-- Floating Brand Logo -->
-  <a href="/" class="floating-logo" aria-label="Integrix AI Home">
-    <img src="/assets/logo-half.svg" alt="Integrix AI logo">
-  </a>
-
-  <nav class="glass-nav">
-    <div class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#who-we-are-section">About Us</a>
-      <a href="#demo-section">Demo</a>
-      <a href="#services-constellation-section">Services</a>
-      <a href="#final-footer">Contact</a>
-    </div>
-  </nav>
-
-  <div id="home" class="hero-container">
-    <video autoplay loop muted playsinline preload="metadata" id="hero-video">
-      <source src="assets/background_video_optimized.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-
-
-
-    <div class="ui-overlay">
-      <div class="hero-content">
-
-<h1 style="color: whitesmoke; font-size: 3.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 2.5rem;">
-  <span style="font-size: 1em; display: block; margin-bottom: 0.25rem;">Never lose a call again.</span>
-  <span style="font-size: 0.5em; font-weight: 100; opacity: 0.8; display: block;">AI that works 24/7</span>
-</h1>
-        <!-- <a href="#" class="glass-btn">Get Started</a>
-          -->
-        <a href="#" class="btn" data-discovery>
-          <div class="icon">
-            <div class="dots">
-              <span></span><span></span><span></span>
-              <span></span><span></span><span></span>
-              <span></span><span></span><span></span>
+    <!-- Page Loader — The Unfold -->
+    <div id="loader">
+        <div class="loader-panel loader-top"></div>
+        <div class="loader-panel loader-bottom"></div>
+        <div class="loader-content">
+            <span class="mono label-text">INTEGRIX AI</span>
+            <div id="loader-line" style="height:1px; background:rgba(0,0,0,0.15); margin-top:10px; width:280px; position:relative;">
+                <div id="loader-progress" style="position:absolute; left:0; top:0; height:100%; width:0; background:var(--text-primary);"></div>
             </div>
-          </div>
-          <span class="label">Book a Discovery Call</span>
-        </a>
-      </div>
-    </div>
-  </div>
-
-  <section class="statement-section">
-    <div class="blur-bridge"></div>
-    <div class="statement-content">
-      <h2>Scaling businesses with AI</h2>
-    </div>
-  </section>
-
-  <!-- Development Branding Section -->
-  <section class="development-branding-section">
-    <div class="divider-row">
-      <span>Development</span>
-    </div>
-
-    <div class="local-carousel-container">
-      <div class="local-carousel-track">
-        <!-- Randomized local logos -->
-        <div class="logo-item"><img src="assets/caraousal/make-text.png" alt="Make"></div>
-        <div class="logo-item"><img src="assets/caraousal/vapi.svg" alt="Vapi"></div>
-        <div class="logo-item"><img src="assets/caraousal/google-white-logo.png" alt="Google"></div>
-        <div class="logo-item"><img src="assets/caraousal/gmail.svg" alt="Gmail"></div>
-        <div class="logo-item"><img src="assets/caraousal/Airtable-Logo-White.png" alt="Airtable"></div>
-        <div class="logo-item"><img src="assets/caraousal/n8n_full_white_logo.svg" alt="n8n"></div>
-        <div class="logo-item"><img src="assets/caraousal/make.png" alt="Make"></div>
-        <div class="logo-item"><img src="assets/caraousal/google-white-icon.svg" alt="Google"></div>
-        <div class="logo-item"><img src="assets/caraousal/airtable-logo-stacked-white.png" alt="Airtable variant"></div>
-
-        <div class="logo-item"><img src="assets/caraousal/vapi2.svg" alt="Vapi variant"></div>
-        <div class="logo-item"><img src="assets/caraousal/n8n_full_white.png" alt="n8n variant"></div>
-        <div class="logo-item"><img src="assets/caraousal/calender.svg" alt="Calendar"></div>
-
-
-
-        <!-- Duplicate set for infinite loop -->
-        <div class="logo-item"><img src="assets/caraousal/make-text.png" alt="Make"></div>
-        <div class="logo-item"><img src="assets/caraousal/vapi.svg" alt="Vapi"></div>
-        <div class="logo-item"><img src="assets/caraousal/google-white-logo.png" alt="Google"></div>
-        <div class="logo-item"><img src="assets/caraousal/gmail.svg" alt="Gmail"></div>
-        <div class="logo-item"><img src="assets/caraousal/Airtable-Logo-White.png" alt="Airtable"></div>
-        <div class="logo-item"><img src="assets/caraousal/n8n_full_white_logo.svg" alt="n8n"></div>
-        <div class="logo-item"><img src="assets/caraousal/make.png" alt="Make"></div>
-        <div class="logo-item"><img src="assets/caraousal/google-white-icon.svg" alt="Google"></div>
-        <div class="logo-item"><img src="assets/caraousal/airtable-logo-stacked-white.png" alt="Airtable variant"></div>
-
-        <div class="logo-item"><img src="assets/caraousal/vapi2.svg" alt="Vapi variant"></div>
-        <div class="logo-item"><img src="assets/caraousal/n8n_full_white.png" alt="n8n variant"></div>
-        <div class="logo-item"><img src="assets/caraousal/calender.svg" alt="Calendar"></div>
-
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Who We Are Section (Capability Cards Rebuild) -->
-  <section id="who-we-are-section" class="who-we-are-root">
-    <div class="who-we-are-container">
-      <header class="who-we-are-header">
-        <h2 class="who-we-are-title">Who we are</h2>
-        <p class="who-we-are-intro">Helping businesses scale by implementing AI systems that work</p>
-      </header>
-
-      <div class="who-we-are-main-grid">
-        <!-- Left: AI Core Pillar -->
-        <div class="who-we-are-pillar-zone">
-          <div class="who-we-are-pillar">
-            <div class="who-we-are-pillar-spine"></div>
-            <div class="who-we-are-pillar-node p1"></div>
-            <div class="who-we-are-pillar-node p2"></div>
-            <div class="who-we-are-pillar-node p3"></div>
-            <div class="who-we-are-pillar-signal s1"></div>
-            <div class="who-we-are-pillar-signal s2"></div>
-          </div>
+            <div id="loader-counter" class="serif italic mt-12" style="font-size:96px;">000</div>
+            <button id="loader-skip" class="mono" style="margin-top:20px; background:none; border:none; color:var(--text-muted); cursor:pointer;">SKIP →</button>
         </div>
+    </div>
 
-        <!-- Right: Capability Cards Stacked -->
-        <div class="who-we-are-stack">
-          <!-- Card 1 -->
-          <div class="who-we-are-card">
-            <div class="who-we-are-card-accent"></div>
-            <h3>AI Customer Support</h3>
-            <p>AI that saves time, captures missed leads, and turns callers into booked buyers — so you convert more deals.</p>
-          </div>
+    <!-- 1 — NAV -->
+    <nav id="nav">
+        <div class="nav-container container">
+            <a href="#" class="nav-logo" data-magnetic>
+                    <img src="/assets/logo-half.svg" alt="Integrix logo" style="height:42px; width:auto; filter:brightness(0); display:block;">
+                </a>
+            <div class="nav-links desktop-only">
+                <a href="#services" class="nav-link" data-magnetic>Services</a>
+                <a href="#process" class="nav-link" data-magnetic>Process</a>
+                <a href="#demos" class="nav-link" data-magnetic>Demos</a>
+                <a href="#contact" class="nav-link" data-magnetic>Contact</a>
+            </div>
+            <div class="nav-right" style="display:flex; align-items:center; gap:24px;">
+                <button class="btn btn-dark open-modal" data-magnetic>Book a Call</button>
+                
+            </div>
+        </div>
+    </nav>
 
-          <!-- Card 2 -->
-          <div class="who-we-are-card">
-            <div class="who-we-are-card-accent"></div>
-            <h3>Inbound & Outbound AI Calling</h3>
-            <p>Deploying technical voice AI agents for specialized sales, support, and lead qualification with
-              human-grade resonance.</p>
-          </div>
+    <!-- 2 — HERO -->
+    <section class="spacer-hero" id="home">
+        <!-- Parallax Background Layers -->
+        <div class="hero-watermark mono" style="position:absolute; right:-4vw; bottom:-6vh; font-size:48vw; font-family:var(--font-display); color:rgba(0,0,0,0.028); pointer-events:none; font-weight:700;" data-lenis-speed="-0.4">I</div>
+        
+        <svg class="hero-arc" viewBox="0 0 100 100" style="position:absolute; top:-10vh; right:-5vw; width:70vw; height:70vw; opacity:0.055; pointer-events:none;" data-lenis-speed="-0.2">
+            <circle cx="100" cy="0" r="100" fill="none" stroke="black" stroke-width="0.1" />
+        </svg>
 
-          <!-- Card 3 -->
-          <div class="who-we-are-card">
-            <div class="who-we-are-card-accent"></div>
-            <h3>AI Automation for Scale</h3>
-            <p>Architecting autonomous workflow layers that reduce manual overhead and allow your business to grow
-              operations horizontally.</p>
-          </div>
-
-          <!-- Card 4 -->
-          <div class="who-we-are-card who-we-are-upcoming">
-            <div class="who-we-are-card-accent"></div>
-            <div class="who-we-are-badge">Emerging Technology</div>
-            <h3>AI Video Ads</h3>
-            <p>Engineering scalable AI video systems that empower brands to generate high-fidelity ad content at speed.
+        <div class="hero-content" data-lenis-speed="0">
+            <span class="mono section-label hero-eyebrow reveal-cascade" style="letter-spacing:0.18em;">AI AUTOMATION &nbsp;·&nbsp; MUMBAI, INDIA &nbsp;·&nbsp; EST. 2024</span>
+            <h1 class="hero-display hero-headline reveal-text mt-12">
+                AI that works<br>
+                <span class="italic" style="color:var(--accent-sienna);">while you don't.</span>
+            </h1>
+            <p class="body-text hero-subheadline scrub-reveal" style="font-size:18px; max-width:500px; color:var(--text-secondary);">
+                Integrix builds AI calling agents, video ad systems, and automation pipelines — so your business runs around the clock, without lifting a finger.
             </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
-
-  <!-- Our Process Section (Engineered Walkthrough Redesign) -->
-  <section id="process" class="process-walkthrough-section">
-    <div class="section-header">
-      <h2 class="section-title">Our Process</h2>
-      <div class="header-line"></div>
-    </div>
-
-    <div class="walkthrough-container">
-      <!-- Left Column: Stable Narrative -->
-      <div class="walkthrough-content">
-        <div class="process-step" data-stage="discovery">
-          <div class="step-meta">Discovery / 01</div>
-          <h3>System Analysis</h3>
-          <p>We perform deep-layer analysis of your data infrastructure and business logic to map out a high-precision
-            AI trajectory.</p>
-        </div>
-        <div class="process-step" data-stage="designing">
-          <div class="step-meta">Designing / 02</div>
-          <h3>Architecture Design</h3>
-          <p>Engineering scalable system blueprints and intuitive interfaces where technical depth meets effortless
-            interaction.</p>
-        </div>
-        <div class="process-step" data-stage="production">
-          <div class="step-meta">Testing / 03</div>
-          <h3>Simulation</h3>
-          <p>Rigorous validation through automated pipelines and parallel simulations to guarantee zero-fault production
-            performance.</p>
-        </div>
-        <div class="process-step" data-stage="deployment">
-          <div class="step-meta">Deployment / 04</div>
-          <h3>Integration & Launch</h3>
-          <p>Precision execution of global deployment with real-time feedback loops for immediate technical and business
-            ROI.</p>
-        </div>
-      </div>
-
-      <!-- Right Column: Dynamic Visual Core -->
-      <div class="walkthrough-visual-area">
-        <div class="visual-core-container">
-          <canvas id="visual-core-canvas"></canvas>
-
-          <!-- Ambient Engineered Elements -->
-          <div class="ambient-metadata">
-            <div class="meta-item">CORE_STATE: <span id="visual-state-label">IDLE</span></div>
-            <div class="meta-item">REF_SYSTEM: INTX_402</div>
-          </div>
-          <div class="corner-accents">
-            <span class="accent tl">+</span>
-            <span class="accent tr">+</span>
-            <span class="accent bl">+</span>
-            <span class="accent br">+</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- Demo Section -->
-  <section id="demo-section" class="demo-section-root">
-    <div class="demo-section-container">
-      <header class="demo-section-header">
-        <h2 class="demo-section-title">Demo</h2>
-      </header>
-
-      <div class="demo-section-cards">
-        <!-- Demo Card 1 -->
-        <div class="demo-section-card">
-          <h3 class="demo-section-card-title">Demo #1</h3>
-          <div class="demo-section-card-content">
-            <div class="demo-section-info">
-              <div class="demo-section-info-item">
-                <span class="demo-section-label">Customer Query</span>
-                <p class="demo-section-text">Query on flat near Mumbai</p>
-              </div>
-              <div class="demo-section-info-item">
-                <span class="demo-section-label">Outcome</span>
-                <p class="demo-section-text">Visit booked + qualified lead</p>
-              </div>
+            <div class="cta-row hero-cta-row flex align-center reveal-cascade" style="display:flex; gap:16px; align-items:center;">
+                <button class="btn btn-dark open-modal" data-magnetic data-cursor="cta">Book a Free Discovery Call</button>
+                <a href="#demos" class="btn-secondary mono" style="font-size:15px; margin-left:16px;">Watch it work ↓</a>
             </div>
-            <div class="demo-section-audio-container">
-              <audio class="demo-section-audio" controls preload="metadata" controlsList="nodownload">
-                <source src="assets/demo/demo1.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </div>
-          </div>
         </div>
 
-        <!-- Demo Card 2 -->
-        <div class="demo-section-card">
-          <h3 class="demo-section-card-title">Demo #2</h3>
-          <div class="demo-section-card-content">
-            <div class="demo-section-info">
-              <div class="demo-section-info-item">
-                <span class="demo-section-label">Customer Query</span>
-                <p class="demo-section-text">Update visit date from their previous booking</p>
-              </div>
-              <div class="demo-section-info-item">
-                <span class="demo-section-label">Outcome</span>
-                <p class="demo-section-text">Handled database excellently</p>
-              </div>
+        <!-- Floating Status Card -->
+        <div class="status-card-wrap desktop-only" style="position:absolute; right:7vw; top:50%; transform:translateY(-50%);" data-lenis-speed="-0.15">
+            <div class="service-card reveal-cascade" style="width:272px; padding:28px 26px; box-shadow: 0 6px 40px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.05); border-radius:20px;">
+                <div class="mono label-text" style="font-size:10px;">SYSTEM STATUS</div>
+                <div class="divider mt-8 mb-16" style="height:1px; background:rgba(0,0,0,0.07);"></div>
+                <div class="status-rows" style="display:flex; flex-direction:column; gap:16px;">
+                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px;">
+                        <span><span class="status-dot-green"></span> VOICE AGENTS</span>
+                        <span class="label-text">ACTIVE</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px;">
+                        <span><span class="status-dot-green"></span> VIDEO ADS</span>
+                        <span class="label-text">ACTIVE</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px;">
+                        <span><span class="status-dot-green"></span> AUTOMATIONS</span>
+                        <span id="auto-counter" style="color:var(--accent-sienna);">841 TODAY</span>
+                    </div>
+                    <div style="display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:11px;">
+                        <span><span class="status-dot-green"></span> RESPONSE TIME</span>
+                        <span class="label-text">1.3s AVG</span>
+                    </div>
+                </div>
+                <div class="divider mt-16 mb-8" style="height:1px; background:rgba(0,0,0,0.07);"></div>
+                <div class="mono label-text" style="font-size:10px;">↑ 99.97% UPTIME · THIS MONTH</div>
             </div>
-            <div class="demo-section-audio-container">
-              <audio class="demo-section-audio" controls preload="metadata" controlsList="nodownload">
-                <source src="assets/demo/demo2.mp3" type="audio/mpeg">
-                Your browser does not support the audio element.
-              </audio>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Our Services Section (System Presentation) -->
-  <section id="services-constellation-section" class="services-system-presentation">
-    <div class="services-system-container">
-      <header class="services-system-header">
-        <div class="system-meta">[ STRAT_DOC_REF: INTX_SERVICES_2026 ]</div>
-        <h2 class="services-system-title">Our Services</h2>
-        <div class="system-guide-hr"></div>
-      </header>
-
-      <div class="services-system-content">
-        <!-- Service 1: AI Calling -->
-        <div class="services-constellation-card capability-strip">
-          <div class="capability-strip-visual">
-            <div class="structural-guide-v"></div>
-            <div class="system-marker">SYS_MOD_01</div>
-            <div class="structural-geometry"></div>
-          </div>
-          <div class="services-constellation-card-body">
-            <div class="services-constellation-card-header">
-              <h3>AI Calling & Voice Operations</h3>
-            </div>
-            <ul class="services-constellation-card-points">
-              <li>
-                <span class="point-title">Your always-on receptionist + SDR</span>
-                <span class="point-desc">Polite, persistent, and impossible to "forget to follow up."</span>
-              </li>
-              <li>
-                <span class="point-title">Inbound that never misses</span>
-                <span class="point-desc">Greet → qualify → route → schedule</span>
-              </li>
-              <li>
-                <span class="point-title">Outbound that performs</span>
-                <span class="point-desc">Targeted campaigns, callbacks, re-engagement</span>
-              </li>
-              <li>
-                <span class="point-title">Follow-ups on rails</span>
-                <span class="point-desc">Multistep cadences across phone, SMS, WhatsApp, and email</span>
-              </li>
-              <li>
-                <span class="point-title">CRM-native</span>
-                <span class="point-desc">Notes, statuses, tasks — no data dead-ends</span>
-              </li>
-              <li>
-                <span class="point-title">Human-grade conversations</span>
-                <span class="point-desc">Natural dialogue, context memory, graceful handoff to your team</span>
-              </li>
-            </ul>
-          </div>
         </div>
 
-        <!-- Service 2: AI Lead Systems -->
-        <div class="services-constellation-card capability-strip reverse-alignment">
-          <div class="capability-strip-visual">
-            <div class="structural-guide-v dashed"></div>
-            <div class="system-marker">SYS_MOD_02</div>
-            <div class="structural-geometry brackets"></div>
-          </div>
-          <div class="services-constellation-card-body">
-            <div class="services-constellation-card-header">
-              <h3>AI Lead & Communication Systems</h3>
+        <!-- Scroll Indicator -->
+        <div class="scroll-indicator" style="position:absolute; bottom:5vh; left:50%; transform:translateX(-50%); text-align:center;">
+            <div style="height:36px; width:1px; background:rgba(0,0,0,0.18); margin:0 auto; position:relative;">
+                <div class="scroll-dot" style="width:5px; height:5px; background:var(--accent-sienna); border-radius:50%; position:absolute; left:-2px;"></div>
             </div>
-            <p class="services-constellation-card-summary">Database management, intelligent email routing, and
-              automated classification.</p>
-          </div>
+            <div class="mono label-text mt-8" style="font-size:9px;">SCROLL</div>
         </div>
+    </section>
 
-        <!-- Service 3: AI Video Ads -->
-        <div class="services-constellation-card capability-strip">
-          <div class="capability-strip-visual">
-            <div class="structural-guide-v"></div>
-            <div class="system-marker">SYS_MOD_03</div>
-            <div class="structural-geometry terminal"></div>
-          </div>
-          <div class="services-constellation-card-body">
-            <div class="services-constellation-card-header">
-              <div class="services-constellation-upcoming-badge">Coming soon</div>
-              <h3>AI Video Ads</h3>
+    <!-- 3 — MARQUEE -->
+    <section class="marquee-section" id="partners">
+        <p class="mono section-label marquee-label text-center" style="font-size:11px; margin-bottom: 32px; width: 100%; display: block;text-align: center;">BUILT ON</p>
+        <div class="marquee-wrapper" style="overflow:hidden; white-space:nowrap; mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);">
+            <div class="marquee-content" style="display:inline-block; animation: marquee-scroll 40s linear infinite;">
+                <img src="/assets/caraousal/make.svg" alt="Make" class="marquee-logo">
+                <img src="/assets/caraousal/vapi.svg" alt="Vapi" class="marquee-logo">
+                <img src="/assets/caraousal/google-white-icon.svg" alt="Google" class="marquee-logo">
+                <img src="/assets/caraousal/gmail.svg" alt="Gmail" class="marquee-logo">
+                <img src="/assets/caraousal/airtable.png" alt="Airtable" class="marquee-logo">
+                <img src="/assets/caraousal/n8n_full_white_logo.svg" alt="n8n" class="marquee-logo">
+                <img src="/assets/caraousal/calender.svg" alt="Cal.com" class="marquee-logo">
+                <!-- Repeat for infinite loop -->
+                <img src="/assets/caraousal/make.svg" alt="Make" class="marquee-logo">
+                <img src="/assets/caraousal/vapi.svg" alt="Vapi" class="marquee-logo">
+                <img src="/assets/caraousal/google-white-icon.svg" alt="Google" class="marquee-logo">
+                <img src="/assets/caraousal/gmail.svg" alt="Gmail" class="marquee-logo">
+                <img src="/assets/caraousal/airtable.png" alt="Airtable" class="marquee-logo">
+                <img src="/assets/caraousal/n8n_full_white_logo.svg" alt="n8n" class="marquee-logo">
+                <img src="/assets/caraousal/calender.svg" alt="Cal.com" class="marquee-logo">
+                <!-- Repeat again -->
+                <img src="/assets/caraousal/make.svg" alt="Make" class="marquee-logo">
+                <img src="/assets/caraousal/vapi.svg" alt="Vapi" class="marquee-logo">
+                <img src="/assets/caraousal/google-white-icon.svg" alt="Google" class="marquee-logo">
+                <img src="/assets/caraousal/gmail.svg" alt="Gmail" class="marquee-logo">
+                <img src="/assets/caraousal/airtable.png" alt="Airtable" class="marquee-logo">
+                <img src="/assets/caraousal/n8n_full_white_logo.svg" alt="n8n" class="marquee-logo">
+                <img src="/assets/caraousal/calender.svg" alt="Cal.com" class="marquee-logo">
             </div>
-            <ul class="services-constellation-card-points">
-              <li>
-                <span class="point-title">Rapid creative production</span>
-                <span class="point-desc">Generate multiple video variations in minutes, not weeks</span>
-              </li>
-              <li>
-                <span class="point-title">Performance-driven storytelling</span>
-                <span class="point-desc">Ads optimized for hooks, retention, and conversion</span>
-              </li>
-              <li>
-                <span class="point-title">Personalization at scale</span>
-                <span class="point-desc">Dynamic messaging by audience, funnel stage, or intent</span>
-              </li>
-              <li>
-                <span class="point-title">Cross-platform ready</span>
-                <span class="point-desc">Built for social, paid ads, and landing pages</span>
-              </li>
-              <li>
-                <span class="point-title">Experimentation first</span>
-                <span class="point-desc">Test, iterate, and scale what actually performs</span>
-              </li>
-            </ul>
-          </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Final Footer Section -->
-  <section id="final-footer" class="final-footer-root">
-    <div class="final-footer-container">
-      <!-- Large Brand Statement -->
-      <div class="final-footer-brand">
-        <h2 class="final-footer-brand-text">INTEGRIX AI</h2>
-      </div>
-
-      <!-- Footer Content Grid -->
-      <div class="final-footer-content">
-        <!-- Left Column: Company Info -->
-        <div class="final-footer-column">
-          <h3 class="final-footer-column-title">Integrix AI</h3>
-          <div class="final-footer-info">
-            <p class="final-footer-info-item">
-              <span class="final-footer-label">Email</span>
-              <a href="mailto:contact@integrixai.me" class="final-footer-link-plain">contact@integrixai.me</a>
-            </p>
-            <p class="final-footer-info-item">
-              <span class="final-footer-label">Phone</span>
-              <a href="tel:+918369665394" class="final-footer-link-plain">+91 8369665394</a>
-            </p>
-            <p class="final-footer-info-item">
-            <div class="final-footer-cta">
-              <p class="final-footer-label discuss-project">Let's discuss your project</p>
-              <a href="#" class="final-footer-book-btn" data-discovery>Book a Discovery Call</a>
-            </div>
+    <!-- 4 — SERVICES -->
+    <section id="services" class="services-section">
+        <div class="container">
+            <span class="mono section-label services-label">[ WHAT WE BUILD ]</span>
+            <h2 class="section-title services-headline reveal-text mt-12">Three systems.<br>Every gap, permanently closed.</h2>
+            <p class="body-text services-subtext scrub-reveal" style="max-width:460px; color:var(--text-secondary);">
+                AI calling, AI video ads, and the automation layer between them. All three live. All three deployable for your business today.
             </p>
 
-          </div>
+            <div class="services-grid">
+                <!-- Card 1 -->
+                <div class="service-card card-tall reveal-cascade" data-tilt data-cursor="card">
+                    <span class="mono" style="color:var(--accent-sienna);">01</span>
+                    <div class="card-visual mt-16" style="height:140px; border-bottom:1px solid var(--divider);">
+                        <svg class="visual-waveform" width="100%" height="100%" viewBox="0 0 400 100">
+                            <!-- Bars generated via JS -->
+                        </svg>
+                    </div>
+                    <h3 class="mt-24" style="font-size:24px; font-weight:600; font-family:var(--font-sans);">AI Calling</h3>
+                    <p class="body-text mt-12" style="font-size:16px;">
+                        An AI agent that answers every inbound call, qualifies the lead, books the appointment, and syncs your CRM — before a human even sees the notification.
+                    </p>
+                    <div class="cap-list mt-28">
+                        <div class="cap-item">→ Inbound qualification & instant booking</div>
+                        <div class="cap-item">→ Outbound campaigns & re-engagement</div>
+                        <div class="cap-item">→ Follow-up sequences: SMS · Email · WhatsApp</div>
+                        <div class="cap-item">→ CRM-native: auto-logs & pipeline updates</div>
+                        <div class="cap-item">→ Human-grade dialogue — no robotic scripts</div>
+                    </div>
+                    <div class="card-footer mt-32 pt-20" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--divider);">
+                        <span class="mono" style="background:rgba(134,239,172,0.15); border:1px solid rgba(134,239,172,0.5); color:#16a34a; padding:4px 8px; border-radius:4px; font-size:10px;">● LIVE</span>
+                        <a href="#" class="open-modal italic" style="font-size:13px; color:var(--accent-sienna); text-decoration:none;">Learn more →</a>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="service-card reveal-cascade" data-tilt data-cursor="card">
+                    <span class="mono" style="color:var(--accent-sienna);">02</span>
+                    <h3 class="mt-20" style="font-size:21px; font-weight:600; font-family:var(--font-sans);">AI Video Ads</h3>
+                    <p class="body-text mt-12" style="font-size:15px; color:var(--text-secondary);">Generate multiple high-performance video ad variations in minutes. Hook-optimized. Platform-ready.</p>
+                    <div class="cap-list mt-20" style="font-size:14px; color:var(--text-muted);">
+                        <div class="cap-item">→ Meta · YouTube · TikTok Ready</div>
+                        <div class="cap-item">→ Rapid A/B iteration</div>
+                    </div>
+                    <div class="card-footer mt-24 pt-16" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--divider);">
+                        <span class="mono" style="color:#16a34a; font-size:10px;">● LIVE</span>
+                        <a href="#" class="open-modal italic" style="font-size:13px; color:var(--accent-sienna); text-decoration:none;">Learn more →</a>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="service-card reveal-cascade" data-tilt data-cursor="card">
+                    <span class="mono" style="color:var(--accent-sienna);">03</span>
+                    <h3 class="mt-20" style="font-size:21px; font-weight:600; font-family:var(--font-sans);">Automation</h3>
+                    <p class="body-text mt-12" style="font-size:15px; color:var(--text-secondary);">The connective tissue between your tools. We eliminate data entry, reporting, and manual ops — permanently.</p>
+                    <div class="cap-list mt-20" style="font-size:14px; color:var(--text-muted);">
+                        <div class="cap-item">→ n8n · Make · custom APIs</div>
+                        <div class="cap-item">→ Data pipelines & auto-reporting</div>
+                    </div>
+                    <div class="card-footer mt-24 pt-16" style="display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--divider);">
+                        <span class="mono" style="color:#16a34a; font-size:10px;">● LIVE</span>
+                        <a href="#" class="open-modal italic" style="font-size:13px; color:var(--accent-sienna); text-decoration:none;">Learn more →</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dark-strip services-bottom-strip reveal-cascade" data-dark-nav style="background:var(--bg-dark); color:var(--text-on-dark); border-radius:12px; padding:26px 40px; display:flex; justify-content:space-between; align-items:center;">
+                <p class="strip-left-text">All three systems work together. Most clients run all three.</p>
+                <a href="#" class="strip-cta open-modal" data-magnetic>
+                    <span class="strip-cta-text">Build yours</span>
+                    <span class="strip-cta-arrow">
+                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M3 8H13M13 8L8.5 3.5M13 8L8.5 12.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </a>
+            </div>
         </div>
+    </section>
 
-        <!-- Right Column: Navigation Links -->
-        <div class="final-footer-column">
-          <h3 class="final-footer-column-title">Navigation</h3>
-          <nav class="final-footer-nav">
-            <a href="#services-constellation-section" class="final-footer-nav-link">Services</a>
-            <a href="#process" class="final-footer-nav-link">Process</a>
-            <a href="#who-we-are-section" class="final-footer-nav-link">About</a>
-            <a href="#final-footer" class="final-footer-nav-link">Contact</a>
-          </nav>
+    <!-- 5 — PROCESS -->
+    <section id="process" class="process-section" style="background:var(--bg-section-alt);">
+        <div class="container">
+            <div class="bg-numerals" style="position:absolute; inset:0; pointer-events:none;">
+                <div class="mono italic" style="position:absolute; top:20%; left:10%; font-size:22vw; opacity:0.03; color:black;" data-lenis-speed="-0.15">I</div>
+                <div class="mono italic" style="position:absolute; top:60%; right:15%; font-size:22vw; opacity:0.03; color:black;" data-lenis-speed="-0.15">II</div>
+            </div>
+            
+            <span class="mono section-label process-label">[ HOW IT WORKS ]</span>
+            <h2 class="section-title process-headline reveal-text mt-12">From conversation<br>to live AI system —<br>fast.</h2>
+            <p class="body-text process-subtext scrub-reveal" style="max-width:380px; color:var(--text-secondary);">Most clients are operational within two weeks. No wasted months. No generic templates.</p>
 
-          <!-- CTA Link -->
-          <div class="final-footer-cta">
-            <a href="./dashboard/index.html" class="final-footer-cta-link">Already working with us? Log in →</a>
-          </div>
+            <div class="process-grid mt-60" style="display:grid; grid-template-columns: 1fr 1fr; gap:0; position:relative;">
+                <div class="v-divider" style="position:absolute; left:50%; top:0; bottom:0; width:1px; background:var(--divider);"></div>
+                
+                <div class="process-col process-col--left">
+                    <div class="step-card py-32" style="border-top:1px solid var(--divider); padding-right:48px;">
+                        <div class="mono step-number" style="color:var(--accent-sienna);" id="step-01-counter">STEP 01</div>
+                        <h4 class="mt-8 step-title" style="font-size:19px; font-weight:600; font-family:var(--font-sans);">Discovery</h4>
+                        <p class="body-text step-body mt-8 reveal-text" style="font-size:15px; max-width:300px;">We spend 30 minutes mapping where your business leaks time, leads, and money. You leave with a precise AI blueprint.</p>
+                    </div>
+                    <div class="step-card py-32" style="border-top:1px solid var(--divider); padding-right:48px;">
+                        <div class="mono step-number" style="color:var(--accent-sienna);">STEP 02</div>
+                        <h4 class="mt-8 step-title" style="font-size:19px; font-weight:600; font-family:var(--font-sans);">System Design</h4>
+                        <p class="body-text step-body mt-8 reveal-text" style="font-size:15px; max-width:300px;">We blueprint your custom stack — models, tools, integrations — and walk you through every decision before a line of code runs.</p>
+                    </div>
+                </div>
+                <div class="process-col process-col--right">
+                    <div class="step-card py-32" style="border-top:1px solid var(--divider); padding-left:48px;">
+                        <div class="mono step-number" style="color:var(--accent-sienna);">STEP 03</div>
+                        <h4 class="mt-8 step-title" style="font-size:19px; font-weight:600; font-family:var(--font-sans);">Build & Test</h4>
+                        <p class="body-text step-body mt-8 reveal-text" style="font-size:15px; max-width:300px;">Every system is stress-tested under adversarial conditions before it touches your real operations. You approve it first.</p>
+                    </div>
+                    <div class="step-card py-32" style="border-top:1px solid var(--divider); padding-left:48px;">
+                        <div class="mono step-number" style="color:var(--accent-sienna);">STEP 04</div>
+                        <h4 class="mt-8 step-title" style="font-size:19px; font-weight:600; font-family:var(--font-sans);">Launch & Stay</h4>
+                        <p class="body-text step-body mt-8 reveal-text" style="font-size:15px; max-width:300px;">Precision go-live with real-time monitoring. We tune in the first 30 days and stay reachable for monthly reviews.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-56">
+                <button class="open-modal" style="background:none; border:none; border-bottom:2px solid var(--accent-sienna); color:var(--text-primary); font-size:17px; font-weight:500; font-family:var(--font-sans); padding-bottom:3px; cursor:pointer;" data-magnetic>Start with a free call →</button>
+            </div>
         </div>
-      </div>
+    </section>
 
-      <!-- Copyright -->
-      <div class="final-footer-copyright">
-        <p>© Integrix AI. All rights reserved.</p>
-      </div>
+    <!-- 6 — DEMOS -->
+    <section id="demos" class="dark-section demos-section" data-dark-nav>
+        <!-- Parallax BG -->
+        <svg class="demo-parallax-svg" viewBox="0 0 100 100" style="position:absolute; top:0; right:-10vw; width:60vw; height:60vw; opacity:0.04; pointer-events:none;" data-lenis-speed="-0.2">
+            <circle cx="50" cy="50" r="48" fill="none" stroke="white" stroke-width="0.1" />
+        </svg>
+
+        <div class="container">
+            <span class="mono section-label demos-label">[ HEAR IT LIVE ]</span>
+            <h2 class="section-title demos-headline reveal-text italic mt-12" style="color:var(--text-on-dark);">Real calls.<br>No edits.<br>No humans.</h2>
+            <p class="body-text demos-subtext scrub-reveal" style="max-width:440px; color:var(--text-on-dark-muted);">Two live demos of Integrix AI agents on actual inbound calls. This is exactly what your business could sound like.</p>
+
+            <div class="demos-list mt-60" style="max-width:800px; margin-left:auto; margin-right:auto; display:flex; flex-direction:column; gap:32px;">
+                <!-- Demo 1 -->
+                <div class="demo-card demo-item reveal-cascade" style="border:1px solid rgba(244,239,230,0.12); border-radius:32px; background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); backdrop-filter:blur(10px); padding:48px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; right:0; width:150px; height:150px; background:radial-gradient(circle at 100% 0%, rgba(200,68,26,0.1), transparent 70%);"></div>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <span class="mono" style="font-size:10px; color:var(--text-on-dark-muted); display:flex; align-items:center; gap:8px;">
+                                <span class="status-dot-green pulse"></span> LIVE DEMO · REAL ESTATE
+                            </span>
+                            <h4 class="serif italic mt-12" style="font-size:32px; color:var(--text-on-dark);">Inbound Lead Qualification</h4>
+                        </div>
+                        <span class="mono" style="font-size:11px; opacity:0.3; background:rgba(255,255,255,0.05); padding:6px 12px; border-radius:20px;">2:14</span>
+                    </div>
+
+                    <div class="mt-32 pt-32" style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid rgba(244,239,230,0.08); gap:24px;">
+                        <div>
+                            <span class="mono" style="font-size:9px; color:var(--text-on-dark-muted); letter-spacing:0.1em;">CHANNEL</span>
+                            <p class="mt-4" style="font-size:16px; color:var(--text-on-dark); font-weight:500;">Direct Inbound Phone</p>
+                        </div>
+                        <div>
+                            <span class="mono" style="font-size:9px; color:var(--text-on-dark-muted); letter-spacing:0.1em;">OUTCOME</span>
+                            <p class="mt-4" style="font-size:16px; color:var(--accent-sienna-light); font-weight:500;">Visit booked · CRM Sync</p>
+                        </div>
+                    </div>
+
+                    <div class="audio-player mt-40" data-audio="/assets/audio/demo1.mp3" style="display:flex; align-items:center; gap:24px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:60px; padding:16px 24px;">
+                        <button class="play-btn" style="width:48px; height:48px; border-radius:50%; background:var(--accent-sienna); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s ease;" data-magnetic>
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="white"/></svg>
+                        </button>
+                        <div class="waveform" style="flex-grow:1; height:40px;"></div>
+                        <span class="mono duration-text" style="font-size:11px; color:var(--text-on-dark-muted);">0:00</span>
+                    </div>
+                </div>
+
+                <!-- Demo 2 -->
+                <div class="demo-card demo-item reveal-cascade" style="border:1px solid rgba(244,239,230,0.12); border-radius:32px; background:linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01)); backdrop-filter:blur(10px); padding:48px; position:relative; overflow:hidden;">
+                    <div style="position:absolute; top:0; right:0; width:150px; height:150px; background:radial-gradient(circle at 100% 0%, rgba(200,68,26,0.1), transparent 70%);"></div>
+                    
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <span class="mono" style="font-size:10px; color:var(--text-on-dark-muted); display:flex; align-items:center; gap:8px;">
+                                <span class="status-dot-green pulse"></span> LIVE DEMO · SERVICE OPS
+                            </span>
+                            <h4 class="serif italic mt-12" style="font-size:32px; color:var(--text-on-dark);">Intelligent Rescheduling</h4>
+                        </div>
+                        <span class="mono" style="font-size:11px; opacity:0.3; background:rgba(255,255,255,0.05); padding:6px 12px; border-radius:20px;">1:45</span>
+                    </div>
+
+                    <div class="mt-32 pt-32" style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid rgba(244,239,230,0.08); gap:24px;">
+                        <div>
+                            <span class="mono" style="font-size:9px; color:var(--text-on-dark-muted); letter-spacing:0.1em;">CHANNEL</span>
+                            <p class="mt-4" style="font-size:16px; color:var(--text-on-dark); font-weight:500;">IVR Replacement</p>
+                        </div>
+                        <div>
+                            <span class="mono" style="font-size:9px; color:var(--text-on-dark-muted); letter-spacing:0.1em;">OUTCOME</span>
+                            <p class="mt-4" style="font-size:16px; color:var(--accent-sienna-light); font-weight:500;">DB Updated · Slack Notif</p>
+                        </div>
+                    </div>
+
+                    <div class="audio-player mt-40" data-audio="/assets/audio/demo2.mp3" style="display:flex; align-items:center; gap:24px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); border-radius:60px; padding:16px 24px;">
+                        <button class="play-btn" style="width:48px; height:48px; border-radius:50%; background:var(--accent-sienna); border:none; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.2s ease;" data-magnetic>
+                            <svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="white"/></svg>
+                        </button>
+                        <div class="waveform" style="flex-grow:1; height:40px;"></div>
+                        <span class="mono duration-text" style="font-size:11px; color:var(--text-on-dark-muted);">0:00</span>
+                    </div>
+                </div>
+            </div>
+            <p class="mono text-center mt-32" style="font-size:11px; color:var(--text-on-dark-muted); opacity:0.5;">Zero human involvement. Zero edits.</p>
+        </div>
+    </section>
+
+    <!-- 7 — CLOSER -->
+    <section class="closer-section" style="text-align:center;">
+        <div class="mono italic" style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); font-size:55vw; opacity:0.025; color:black; font-weight:700;" data-lenis-speed="-0.35">Now?</div>
+        
+        <div class="container" style="position:relative; z-index:1;">
+            <span class="mono section-label closer-label">[ ONE QUESTION REMAINS ]</span>
+            <h2 class="hero-display closer-headline reveal-text italic mt-12" style="font-size:clamp(44px,6vw,88px);">How much longer will<br>you run without AI?</h2>
+            <p class="body-text closer-body mt-20 mx-auto scrub-reveal" style="max-width:460px; color:var(--text-secondary);">One free call. Thirty minutes. No sales pressure. We'll show you exactly what's possible — and what it costs to keep doing it the old way.</p>
+            
+            <button class="btn btn-dark closer-cta mt-44 open-modal" data-magnetic data-cursor="cta" style="padding:16px 36px; font-size:17px;">Book a Free Discovery Call</button>
+            <div class="mt-18"><a href="mailto:contact@integrixai.me" class="label-text" style="font-size:14px; text-decoration:none;">contact@integrixai.me</a></div>
+            
+            <div class="signature mt-72" style="display:flex; justify-content:center; gap:8px;">
+                <div class="sig-dot" style="width:8px; height:8px; background:var(--text-primary); border-radius:50%;"></div>
+                <div class="sig-dot" style="width:5px; height:5px; background:var(--accent-sienna); border-radius:50%; margin-top:1.5px;"></div>
+                <div class="sig-dot" style="width:8px; height:8px; background:var(--text-primary); border-radius:50%;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8 — FOOTER -->
+    <footer id="contact" class="footer-bar" data-dark-nav>
+        <div class="container">
+            <div class="footer-columns">
+                <div class="footer-col--logo">
+                    <img id="footer-logo" class="footer-logo" src="/assets/logo-half.svg" alt="Integrix Logo" style="height:48px; width:auto; display:block; margin-bottom:20px;">
+                    <p class="mono footer-descriptor mt-14">AI AUTOMATION AGENCY<br>MUMBAI, INDIA · EST. 2024</p>
+                </div>
+                <div>
+                    <p class="mono footer-col-label">NAVIGATE</p>
+                    <div style="display:flex; flex-direction:column;">
+                        <a href="#services" class="footer-link" data-magnetic>Services</a>
+                        <a href="#process" class="footer-link" data-magnetic>How It Works</a>
+                        <a href="#demos" class="footer-link" data-magnetic>Demos</a>
+                    </div>
+                </div>
+                <div class="footer-col--contact">
+                    <p class="mono footer-col-label">CONTACT</p>
+                    <div style="display:flex; flex-direction:column;">
+                        <a href="mailto:contact@integrixai.me" class="footer-link">contact@integrixai.me</a>
+                        <a href="tel:+918369665394" class="footer-link">+91 8369665394</a>
+                        <a href="/dashboard/index.html" class="footer-link mt-20" style="color:rgba(244,239,230,0.8);">Login →</a>
+                    </div>
+                </div>
+                <div>
+                    <p class="mono footer-col-label">FOLLOW</p>
+                    <div style="display:flex; flex-direction:column;">
+                        <a href="#" class="footer-link" data-magnetic>LinkedIn ↗</a>
+                        <a href="#" class="footer-link" data-magnetic>X / Twitter ↗</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom footer-bottom-row">
+                <p class="mono footer-bottom-left">© 2026 Integrix AI. All rights reserved.</p>
+                <div class="footer-signature">
+                    <div class="footer-signature-dot"></div>
+                    <div class="footer-signature-dot"></div>
+                    <div class="footer-signature-dot"></div>
+                </div>
+                <p class="mono footer-bottom-right">Built with intelligence.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL -->
+    <div id="modal-overlay" class="modal-overlay" data-dark-nav style="position:fixed; inset:0; background:rgba(14,14,14,0.72); backdrop-filter:blur(14px); z-index:10000; display:none; align-items:center; justify-content:center;">
+        <div class="modal-panel" style="background:var(--bg-page); padding:48px; border-radius:18px; max-width:460px; width:90%; border:1px solid rgba(0,0,0,0.1); position:relative; border-top:3px solid var(--accent-sienna);">
+            <button id="modal-close" style="position:absolute; top:24px; right:24px; background:none; border:none; font-size:22px; color:var(--text-muted); cursor:pointer;">×</button>
+            <h3 class="serif italic" style="font-size:28px;">Book a Discovery Call</h3>
+            <p class="body-text mt-8" style="font-size:14px; color:var(--text-secondary);">Free. 30 minutes. No pitch. We'll show you exactly what AI can do for your business.</p>
+            
+            <form class="discovery-form" id="discoveryForm">
+                <div class="form-field">
+                    <label class="form-label" for="name">FULL NAME <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" required class="form-input" placeholder="Your full name" autocomplete="name">
+                </div>
+                <div class="form-field">
+                    <label class="form-label" for="email">EMAIL ADDRESS <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required class="form-input" placeholder="your@email.com" autocomplete="email">
+                </div>
+                <div class="form-field">
+                    <label class="form-label" for="phone">PHONE NUMBER <span class="optional">(optional)</span></label>
+                    <div class="phone-field-wrapper">
+                        <select class="phone-country-select" name="country_code" id="country_code" autocomplete="tel-country-code">
+                            <option value="+91" selected>🇮🇳 +91</option>
+                            <option value="+1">🇺🇸 +1</option>
+                            <option value="+44">🇬🇧 +44</option>
+                            <option value="+61">🇦🇺 +61</option>
+                            <option value="+971">🇦🇪 +971</option>
+                            <option value="+65">🇸🇬 +65</option>
+                            <option value="+60">🇲🇾 +60</option>
+                            <option value="+49">🇩🇪 +49</option>
+                            <option value="+33">🇫🇷 +33</option>
+                        </select>
+                        <input type="tel" id="phone" name="phone" class="form-input phone-input" placeholder="98765 43210" autocomplete="tel-local">
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label class="form-label" for="situation">YOUR BIGGEST BOTTLENECK <span class="optional">(optional)</span></label>
+                    <textarea id="situation" name="situation" rows="3" placeholder="Missed calls? Manual data entry? Tell us." class="form-input form-textarea"></textarea>
+                </div>
+                <button type="submit" class="form-submit btn btn-dark" style="width:100%; margin-top:28px;" data-magnetic>
+                    <span class="submit-text">Send Request</span>
+                    <span class="submit-loader" aria-hidden="true">
+                        <span></span><span></span><span></span>
+                    </span>
+                </button>
+            </form>
+
+            <div id="modal-success" style="display:none; text-align:center; padding:40px 0;">
+                <svg viewBox="0 0 24 24" width="52" height="52" stroke="var(--accent-sienna)" stroke-width="2" fill="none"><path d="M20 6L9 17L4 12"/></svg>
+                <h3 class="serif italic mt-16" style="font-size:28px;">Sent.</h3>
+                <p class="body-text mt-8">We've confirmed it to your inbox. Expect to hear from us shortly.</p>
+            </div>
+        </div>
     </div>
-  </section>
 
-
-  <!-- DISCOVERY CALL MODAL -->
-  <div id="discovery-modal" class="modal-overlay">
-    <div class="modal-card bordered">
-      <button class="modal-close" aria-label="Close">&times;</button>
-
-      <h2 class="modal-title">Book a Discovery Call</h2>
-      <p class="modal-subtitle">
-        Share a few details and we’ll reach out shortly.
-      </p>
-
-      <form id="discovery-form" novalidate>
-        <!-- NAME -->
-        <div class="form-group">
-          <label>Name *</label>
-          <input type="text" name="name" required placeholder="Your full name" />
-        </div>
-
-        <!-- EMAIL (REQUIRED) -->
-        <div class="form-group">
-          <label>Email *</label>
-          <input type="email" name="email" required placeholder="you@company.com" />
-        </div>
-
-        <!-- PHONE (OPTIONAL) -->
-        <div class="form-group">
-          <label>
-            Phone (optional)
-            <span class="hint">Recommended for faster reach</span>
-          </label>
-
-          <div class="phone-row">
-            <select name="country">
-              <option value="+91">🇮🇳 +91 (IN)</option>
-              <option value="+1">🇺🇸 +1 (US)</option>
-              <option value="+44">🇬🇧 +44 (UK)</option>
-              <option value="+61">🇦🇺 +61 (AU)</option>
-              <option value="+49">🇩🇪 +49 (DE)</option>
-              <option value="+33">🇫🇷 +33 (FR)</option>
-              <option value="+81">🇯🇵 +81 (JP)</option>
-              <option value="+971">🇦🇪 +971 (UAE)</option>
-            </select>
-
-            <input type="tel" name="phone" placeholder="Phone number" />
-          </div>
-        </div>
-
-        <!-- QUERY -->
-        <div class="form-group">
-          <label>Query (optional)</label>
-          <textarea name="query" rows="3" placeholder="Briefly tell us what you're looking to build..."></textarea>
-        </div>
-
-        <button type="submit" class="submit-btn">
-          Submit Request
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- SUCCESS MESSAGE -->
-  <!-- CONFIRMATION POPUP -->
-  <div id="confirmation-popup" class="confirmation-popup">
-    <div class="confirmation-content">
-      <p>
-        We’ve received your request.
-        A confirmation has already been sent to your email — a small preview of how fast our automations work.
-      </p>
-      <button id="confirm-ok" class="confirm-btn">OK</button>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+    <!-- JS -->
+    <script src="index.js" defer></script>
+    <style>
+        /* Small utility styles for inline HTML use */
+        .status-dot-green { display: inline-block; width: 6px; height: 6px; background: #86EFAC; border-radius: 50%; margin-right: 6px; }
+        .pulse { animation: pulse-anim 2.5s infinite; }
+        @keyframes pulse-anim { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.5; } }
+        @keyframes marquee-scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .marquee-logo { height: 28px; margin: 0 40px; opacity: 0.32; filter: grayscale(90%); transition: 0.3s; }
+        .marquee-logo:hover { opacity: 0.82; filter: grayscale(0%); }
+        .cap-item { font-size: 14px; color: var(--text-muted); padding: 12px 0; border-top: 1px solid rgba(0,0,0,0.06); transition: 0.2s; }
+        .cap-item:hover { color: var(--text-primary); transform: translateX(4px); }
+    </style>
 </body>
-
 </html>
