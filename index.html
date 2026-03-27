@@ -62,11 +62,33 @@
                 <a href="#contact" class="nav-link" data-magnetic>Contact</a>
             </div>
             <div class="nav-right" style="display:flex; align-items:center; gap:24px;">
-                <button class="btn btn-dark open-modal" data-magnetic>Book a Call</button>
-                
+                <button class="btn btn-dark open-modal desktop-only" data-magnetic>Book a Call</button>
+                <button id="menu-toggle" class="mobile-only" aria-label="Toggle Menu">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
             </div>
         </div>
     </nav>
+
+    <!-- MOBILE MENU OVERLAY -->
+    <div id="mobile-menu" class="mobile-menu-overlay">
+        <button id="menu-close-btn" class="mobile-menu-close" aria-label="Close Menu">×</button>
+        <div class="mobile-menu-content">
+            <div class="mobile-menu-links">
+                <a href="#services" class="mobile-link">Services</a>
+                <a href="#process" class="mobile-link">Process</a>
+                <a href="#demos" class="mobile-link">Demos</a>
+                <a href="#contact" class="mobile-link">Contact</a>
+            </div>
+            <div class="mobile-menu-footer">
+                <button class="btn btn-dark open-modal w-100" style="width:100%;">Book a Free Discovery Call</button>
+                <div class="mt-24">
+                    <a href="mailto:contact@integrixai.me" class="mono" style="font-size:10px; text-decoration:none; color:var(--text-muted);">contact@integrixai.me</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- 2 — HERO -->
     <section class="spacer-hero" id="home">
@@ -78,7 +100,7 @@
         </svg>
 
         <div class="hero-content" data-lenis-speed="0">
-            <span class="mono section-label hero-eyebrow reveal-cascade" style="letter-spacing:0.18em;">AI AUTOMATION &nbsp;·&nbsp; MUMBAI, INDIA &nbsp;·&nbsp; EST. 2024</span>
+            <span class="mono section-label hero-eyebrow reveal-cascade" style="letter-spacing:0.18em;">AI AUTOMATION &nbsp;·&nbsp; MUMBAI, INDIA &nbsp;·&nbsp; EST. 2026</span>
             <h1 class="hero-display hero-headline reveal-text mt-12">
                 AI that works<br>
                 <span class="italic" style="color:var(--accent-sienna);">while you don't.</span>
@@ -253,7 +275,7 @@
             <h2 class="section-title process-headline reveal-text mt-12">From conversation<br>to live AI system —<br>fast.</h2>
             <p class="body-text process-subtext scrub-reveal" style="max-width:380px; color:var(--text-secondary);">Most clients are operational within two weeks. No wasted months. No generic templates.</p>
 
-            <div class="process-grid mt-60" style="display:grid; grid-template-columns: 1fr 1fr; gap:0; position:relative;">
+            <div class="process-grid mt-60">
                 <div class="v-divider" style="position:absolute; left:50%; top:0; bottom:0; width:1px; background:var(--divider);"></div>
                 
                 <div class="process-col process-col--left">
@@ -399,7 +421,7 @@
             <div class="footer-columns">
                 <div class="footer-col--logo">
                     <img id="footer-logo" class="footer-logo" src="/assets/logo-half.svg" alt="Integrix Logo" style="height:48px; width:auto; display:block; margin-bottom:20px;">
-                    <p class="mono footer-descriptor mt-14">AI AUTOMATION AGENCY<br>MUMBAI, INDIA · EST. 2024</p>
+                    <p class="mono footer-descriptor mt-14">AI AUTOMATION AGENCY<br>MUMBAI, INDIA · EST. 2026</p>
                 </div>
                 <div>
                     <p class="mono footer-col-label">NAVIGATE</p>
@@ -420,8 +442,8 @@
                 <div>
                     <p class="mono footer-col-label">FOLLOW</p>
                     <div style="display:flex; flex-direction:column;">
-                        <a href="#" class="footer-link" data-magnetic>LinkedIn ↗</a>
-                        <a href="#" class="footer-link" data-magnetic>X / Twitter ↗</a>
+                        <a href="https://www.linkedin.com/company/integrixai-in/" class="footer-link" target="_blank" data-magnetic>LinkedIn ↗</a>
+                        <!-- <a href="" class="footer-link" data-magnetic>Instagram ↗</a> -->
                     </div>
                 </div>
             </div>

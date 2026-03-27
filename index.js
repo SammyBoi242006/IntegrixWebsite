@@ -93,7 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 ease: "reveal",
                 scrollTrigger: {
                     trigger: el,
-                    start: "top 88%"
+                    start: isMobile ? "top 95%" : "top 88%",
+                    toggleActions: "play none none none"
                 }
             });
         });
@@ -500,7 +501,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('discoveryForm');
     const success = document.getElementById('modal-success');
 
+    // Mobile Menu Logic
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuCloseBtn = document.getElementById('menu-close-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+
+    if (menuToggle && mobileMenu) {
+        const toggleMenu = (forceClose = false) => {
+            const isActive = forceClose ? false : menuToggle.classList.toggle('active');
+            if (forceClose) menuToggle.classList.remove('active');
+            
+            mobileMenu.classList.toggle('active', isActive);
+            document.body.style.overflow = isActive ? 'hidden' : '';
+            if (lenis) isActive ? lenis.stop() : lenis.start();
+
+            if (isActive) {
+                gsap.from('.mobile-link', {
+                    y: 30,
+                    opacity: 0,
+                    stagger: 0.1,
+                    duration: 0.4,
+                    ease: "power2.out",
+                    delay: 0.2
+                });
+            }
+        };
+
+        menuToggle.addEventListener('click', () => toggleMenu());
+        if (menuCloseBtn) menuCloseBtn.addEventListener('click', () => toggleMenu(true));
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => toggleMenu(true));
+        });
+    }
+
     openBtns.forEach(b => b.addEventListener('click', () => {
+        // If mobile menu is open, close it
+        if (menuToggle?.classList.contains('active')) {
+            menuToggle.click();
+        }
         modal.style.display = 'flex';
         gsap.fromTo(modal, { opacity: 0 }, { opacity: 1, duration: 0.4 });
         gsap.fromTo(modal.querySelector('.modal-panel'), { y: 28, scale: 0.96 }, { y: 0, scale: 1, duration: 0.4, ease: "reveal" });
