@@ -576,6 +576,21 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { form.style.display = 'block'; success.style.display = 'none'; form.reset(); }, 400);
     }
 
+    // Toast Notification Helper
+    function showToast(message) {
+        let toast = document.querySelector('.toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'toast';
+            document.body.appendChild(toast);
+        }
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
     // Form Loading State + API Connection
     if (form) {
         form.addEventListener('submit', async (e) => {
@@ -591,7 +606,11 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                const response = await fetch('http://localhost:3000/send-email', {
+                // Determine API host (use current hostname if not localhost)
+                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const apiHost = isLocal ? 'localhost' : window.location.hostname;
+                
+                const response = await fetch(`http://${apiHost}:3000/send-email`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -605,13 +624,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     form.classList.remove('is-loading');
                     form.style.display = 'none';
                     success.style.display = 'block';
+                    showToast('Request sent successfully!');
                 } else {
                     throw new Error(result.error || 'Failed to send email');
                 }
             } catch (error) {
                 console.error('Submission error:', error);
                 form.classList.remove('is-loading');
-                alert('Connection error: Make sure the server is running on port 3000.');
+                showToast('Error: Could not send request. Please try again.');
             }
         });
     }

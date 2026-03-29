@@ -7,17 +7,25 @@ const PORT = 3000;
 // Replace these with your actual SMTP credentials
 const SMTP_HOST = 'smtp.gmail.com';
 const SMTP_PORT = 587;
-const SMTP_USER = 'contact@integrixai.me';
-const SMTP_PASS = process.env.GMAIL;
+const SMTP_USER = process.env.EMAIL || 'contact@integrixai.me';
+const SMTP_PASS = (process.env.GMAIL || '').replace(/\s/g, '');
+const FROM_EMAIL = 'contact@integrixai.me';
+
+console.log('Environment Debug:', {
+  auth_user: SMTP_USER,
+  display_email: FROM_EMAIL,
+  passLength: SMTP_PASS ? SMTP_PASS.length : 0,
+  passPrefix: SMTP_PASS ? SMTP_PASS.substring(0, 2) + '...' : 'none'
+});
 
 const transporter = nodemailer.createTransport({
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: false, // true for 465, false for other ports
+  service: 'gmail',
   auth: {
     user: SMTP_USER,
     pass: SMTP_PASS,
   },
+  logger: true,
+  debug: true
 });
 
 const server = http.createServer((req, res) => {
@@ -47,7 +55,7 @@ const server = http.createServer((req, res) => {
 
         // Message to the user who filled the form
         const userMailOptions = {
-          from: `"Integrix" <${SMTP_USER}>`,
+          from: `"Integrix" <${FROM_EMAIL}>`,
           to: email, // send to the user's email
           subject: 'Thank you for reaching out to Integrix',
           text: `Hi ${name},\n\nThank of reaching out to us, out team will contact you shortly\n\nThanking\nIntegrix`,
@@ -55,8 +63,8 @@ const server = http.createServer((req, res) => {
 
         // Message to the internal team (optional, keeping it here so the website owner gets the lead)
         const teamMailOptions = {
-          from: `"Integrix Website" <${SMTP_USER}>`,
-          to: SMTP_USER, // send to yourself
+          from: `"Integrix Website" <${FROM_EMAIL}>`,
+          to: FROM_EMAIL, // send to yourself
           subject: 'New Discovery Call Request',
           text: `New request received:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nQuery: ${query}`,
         };
@@ -81,5 +89,4 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, () => {
   console.log(`SMTP Server running on http://localhost:${PORT}`);
-  console.log('Ensure you have installed nodemailer: npm install nodemailer');
 });
