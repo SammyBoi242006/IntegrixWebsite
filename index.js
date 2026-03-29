@@ -606,11 +606,20 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                // Determine API host (use current hostname if not localhost)
+                // Determine API host
+                const isHTTPS = window.location.protocol === 'https:';
+                // Public Ngrok URL provided by the user for HTTPS support
+                const ngrokUrl = 'https://preoccipital-nonostensibly-nery.ngrok-free.dev';
+                
+                // Fallback for local development
                 const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
                 const apiHost = isLocal ? 'localhost' : window.location.hostname;
+                const localUrl = `http://${apiHost}:3000`;
+
+                // Use Ngrok if on HTTPS to avoid Mixed Content errors
+                const apiUrl = isHTTPS ? ngrokUrl : localUrl;
                 
-                const response = await fetch(`http://${apiHost}:3000/send-email`, {
+                const response = await fetch(`${apiUrl}/send-email`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
