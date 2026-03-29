@@ -53,9 +53,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         tl.to(loaderContent, { opacity: 0, scale: 0.94, duration: 0.35, ease: "power2.in" })
-          .to(loaderTop, { y: "-100%", duration: 0.8, ease: "power3.inOut" }, "+=0.2")
-          .to(loaderBottom, { y: "100%", duration: 0.8, ease: "power3.inOut" }, "<")
-          .set(loader, { pointerEvents: "none" });
+            .to(loaderTop, { y: "-100%", duration: 0.8, ease: "power3.inOut" }, "+=0.2")
+            .to(loaderBottom, { y: "100%", duration: 0.8, ease: "power3.inOut" }, "<")
+            .set(loader, { pointerEvents: "none" });
     }
 
     skipBtn.addEventListener('click', () => {
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // --- FIX 6 — ADDITIVE PARALLAX ---
-        
+
         // 6a — Services Section Depth
         gsap.to('.services-label', {
             yPercent: -18,
@@ -236,13 +236,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (isMobile) initAnimations();
 
     // --- 4. CUSTOM CURSOR ---
     const dot = document.querySelector('.cursor-dot');
     const ring = document.querySelector('.cursor-ring');
     const ringText = ring.querySelector('.cursor-text');
-    
+
     let mouseX = 0, mouseY = 0;
     let ringX = 0, ringY = 0;
     const LERP = 0.09;
@@ -321,8 +320,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const centerY = rect.top + rect.height / 2;
             const dx = e.clientX - centerX;
             const dy = e.clientY - centerY;
-            const dist = Math.sqrt(dx*dx + dy*dy);
-            
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
             if (dist < RADIUS) {
                 gsap.to(el, {
                     x: dx * PULL_STRENGTH,
@@ -353,11 +352,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const centerY = rect.height / 2;
             const rotateX = (y - centerY) / 25;
             const rotateY = (centerX - x) / 20;
-            
-            gsap.to(card, { 
-                rotateX: rotateX, 
-                rotateY: rotateY, 
-                duration: 0.5, 
+
+            gsap.to(card, {
+                rotateX: rotateX,
+                rotateY: rotateY,
+                duration: 0.5,
                 ease: "power2.out"
             });
 
@@ -379,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
         visualWaveform.appendChild(g);
         const bars = [];
-        for(let i=0; i<barCount; i++) {
+        for (let i = 0; i < barCount; i++) {
             const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
             const x = (i / barCount) * 100 + "%";
             rect.setAttribute("x", x);
@@ -404,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     h = Math.abs(Math.sin(time + i * 0.1)) * 15 + 15;
                     bar.setAttribute("fill", "rgba(0,0,0,0.12)");
                 }
-                bar.setAttribute("y", 50 - h/2);
+                bar.setAttribute("y", 50 - h / 2);
                 bar.setAttribute("height", h);
             });
             requestAnimationFrame(animateHeroWave);
@@ -422,7 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const barCount = 48;
         const bars = [];
 
-        for(let i=0; i<barCount; i++) {
+        for (let i = 0; i < barCount; i++) {
             const bar = document.createElement('div');
             bar.className = 'waveform-bar';
             waveform.appendChild(bar);
@@ -458,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     a.pause();
                     // Reset other buttons
                     const otherBtn = a.parentElement?.querySelector('.play-btn');
-                    if(otherBtn) otherBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="white"/></svg>';
+                    if (otherBtn) otherBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M8 5v14l11-7z" fill="white"/></svg>';
                 });
                 audio.play();
                 btn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="white"/></svg>';
@@ -472,7 +471,7 @@ document.addEventListener('DOMContentLoaded', () => {
         function renderFrame() {
             if (!audio.paused) {
                 analyser.getByteFrequencyData(data);
-                for(let i=0; i<barCount; i++) {
+                for (let i = 0; i < barCount; i++) {
                     const h = (data[i] / 255) * 80 + 20;
                     bars[i].style.height = `${h}%`;
                     bars[i].style.background = 'rgba(244,239,230,0.85)';
@@ -489,10 +488,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let baseCount = 841;
     setInterval(() => {
         baseCount += 1;
-        gsap.to(autoCounter, { y: -12, opacity: 0, duration: 0.25, onComplete: () => {
-            autoCounter.textContent = `${baseCount} TODAY`;
-            gsap.fromTo(autoCounter, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25 });
-        }});
+        gsap.to(autoCounter, {
+            y: -12, opacity: 0, duration: 0.25, onComplete: () => {
+                autoCounter.textContent = `${baseCount} TODAY`;
+                gsap.fromTo(autoCounter, { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: 0.25 });
+            }
+        });
     }, 3200);
 
     const modal = document.getElementById('modal-overlay');
@@ -508,25 +509,44 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileLinks = document.querySelectorAll('.mobile-link');
 
     if (menuToggle && mobileMenu) {
-        const toggleMenu = (forceClose = false) => {
-            const isActive = forceClose ? false : menuToggle.classList.toggle('active');
-            if (forceClose) menuToggle.classList.remove('active');
-            
-            mobileMenu.classList.toggle('active', isActive);
-            document.body.style.overflow = isActive ? 'hidden' : '';
-            if (lenis) isActive ? lenis.stop() : lenis.start();
+    const toggleMenu = (forceClose = false) => {
+        if (!menuToggle || !mobileMenu) return;
 
-            if (isActive) {
-                gsap.from('.mobile-link', {
-                    y: 30,
-                    opacity: 0,
-                    stagger: 0.1,
-                    duration: 0.4,
-                    ease: "power2.out",
-                    delay: 0.2
-                });
-            }
-        };
+        const isActive = forceClose ? false : menuToggle.classList.toggle('active');
+        if (forceClose) menuToggle.classList.remove('active');
+
+        document.body.style.overflow = isActive ? 'hidden' : '';
+        if (lenis) isActive ? lenis.stop() : lenis.start();
+
+        if (isActive) {
+            // Open: Fade + Slight Slide Up
+            gsap.set(mobileMenu, { display: 'flex', opacity: 0, y: 30 });
+            gsap.to(mobileMenu, {
+                opacity: 1,
+                y: 0,
+                duration: 0.4,
+                ease: "power2.out"
+            });
+            gsap.from('.mobile-link', {
+                y: 20,
+                opacity: 0,
+                stagger: 0.05,
+                duration: 0.4,
+                delay: 0.1
+            });
+        } else {
+            // Close: Fade Out
+            gsap.to(mobileMenu, {
+                opacity: 0,
+                y: 30,
+                duration: 0.3,
+                ease: "power2.in",
+                onComplete: () => {
+                    gsap.set(mobileMenu, { display: 'none' });
+                }
+            });
+        }
+    };
 
         menuToggle.addEventListener('click', () => toggleMenu());
         if (menuCloseBtn) menuCloseBtn.addEventListener('click', () => toggleMenu(true));
@@ -548,10 +568,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
 
     closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if(e.target === modal) closeModal(); });
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
     function closeModal() {
-        gsap.to(modal, { opacity: 0, duration: 0.3, onComplete: () => { modal.style.display = 'none'; }});
+        gsap.to(modal, { opacity: 0, duration: 0.3, onComplete: () => { modal.style.display = 'none'; } });
         if (lenis) lenis.start();
         setTimeout(() => { form.style.display = 'block'; success.style.display = 'none'; form.reset(); }, 400);
     }
@@ -595,7 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-    
+
     window.addEventListener('load', () => {
         ScrollTrigger.refresh();
     });
