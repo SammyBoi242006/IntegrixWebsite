@@ -489,7 +489,7 @@
                             <option value="+49">🇩🇪 +49</option>
                             <option value="+33">🇫🇷 +33</option>
                         </select>
-                        <input type="tel" id="phone" name="phone" class="form-input phone-input" placeholder="98765 43210" autocomplete="tel-local">
+                        <input type="tel" id="phone" name="phone" class="form-input phone-input" placeholder="98765 43210" autocomplete="tel">
                     </div>
                 </div>
                 <div class="form-field">
@@ -524,6 +524,33 @@
         .marquee-logo:hover { opacity: 0.82; filter: grayscale(0%); }
         .cap-item { font-size: 14px; color: var(--text-muted); padding: 12px 0; border-top: 1px solid rgba(0,0,0,0.06); transition: 0.2s; }
         .cap-item:hover { color: var(--text-primary); transform: translateX(4px); }
+        
+        /* Form Loading State */
+        .discovery-form.is-loading .submit-text { opacity: 0; }
+        .discovery-form.is-loading .submit-loader { display: flex; opacity: 1; }
+        .submit-loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .submit-loader span {
+            width: 6px;
+            height: 6px;
+            background: currentColor;
+            border-radius: 50%;
+            animation: loader-dots 1.4s infinite ease-in-out both;
+        }
+        .submit-loader span:nth-child(1) { animation-delay: -0.32s; }
+        .submit-loader span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes loader-dots {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
     </style>
 </body>
 </html>

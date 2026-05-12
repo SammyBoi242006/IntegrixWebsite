@@ -609,6 +609,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
+            if (form.classList.contains('is-loading')) return; // Prevent double submission
+            
             form.classList.add('is-loading');
 
             const formData = new FormData(form);
