@@ -17,14 +17,26 @@ document.addEventListener('DOMContentLoaded', () => {
         gsap.ticker.lagSmoothing(0);
     }
 
-    // --- 2. THE UNFOLD (Loader) ---
+    // --- 0. GLOBAL ELEMENTS ---
+    const modal = document.getElementById('modal-overlay');
+    const openBtns = document.querySelectorAll('.open-modal');
+    const closeBtn = document.getElementById('modal-close');
+    const form = document.getElementById('discoveryForm');
+    const success = document.getElementById('modal-success');
     const loader = document.getElementById('loader');
-    const loaderTop = loader.querySelector('.loader-top');
-    const loaderBottom = loader.querySelector('.loader-bottom');
-    const loaderContent = loader.querySelector('.loader-content');
+    const loaderTop = loader?.querySelector('.loader-top');
+    const loaderBottom = loader?.querySelector('.loader-bottom');
+    const loaderContent = loader?.querySelector('.loader-content');
     const loaderCounter = document.getElementById('loader-counter');
     const loaderProgress = document.getElementById('loader-progress');
     const skipBtn = document.getElementById('loader-skip');
+    const menuToggle = document.getElementById('menu-toggle');
+    const menuCloseBtn = document.getElementById('menu-close-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    const autoCounter = document.getElementById('auto-counter');
+
+    // --- 2. THE UNFOLD (Loader) ---
 
     let count = 0;
     // Non-linear counter: rushes 0-35, eases 35-85, sprints 85-100
@@ -496,7 +508,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- 9. LIVE COUNTER & MODAL ---
-    const autoCounter = document.getElementById('auto-counter');
     let baseCount = 841;
     setInterval(() => {
         baseCount += 1;
@@ -508,18 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, 3200);
 
-    const modal = document.getElementById('modal-overlay');
-    const openBtns = document.querySelectorAll('.open-modal');
-    const closeBtn = document.getElementById('modal-close');
-    const form = document.getElementById('discoveryForm');
-    const success = document.getElementById('modal-success');
-
     // Mobile Menu Logic
-    const menuToggle = document.getElementById('menu-toggle');
-    const menuCloseBtn = document.getElementById('menu-close-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileLinks = document.querySelectorAll('.mobile-link');
-
     if (menuToggle && mobileMenu) {
     const toggleMenu = (forceClose = false) => {
         if (!menuToggle || !mobileMenu) return;
