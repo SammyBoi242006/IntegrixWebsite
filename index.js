@@ -250,7 +250,9 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            gsap.set(dot, { x: mouseX - 5, y: mouseY - 5 });
+            
+            // Use translate3d for better performance
+            dot.style.transform = `translate3d(${mouseX - 5}px, ${mouseY - 5}px, 0)`;
 
             // Dark Section Detection (Foolproof)
             const target = document.elementFromPoint(mouseX, mouseY);
@@ -262,9 +264,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         function animateRing() {
+            if (document.body.classList.contains('modal-active')) {
+                requestAnimationFrame(animateRing);
+                return;
+            }
             ringX += (mouseX - ringX) * LERP;
             ringY += (mouseY - ringY) * LERP;
-            gsap.set(ring, { x: ringX - 22, y: ringY - 22 });
+            
+            // Use translate3d for better performance
+            ring.style.transform = `translate3d(${ringX - 22}px, ${ringY - 22}px, 0)`;
             requestAnimationFrame(animateRing);
         }
         animateRing();
@@ -392,6 +400,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function animateHeroWave() {
+            if (modal && modal.style.display === 'flex') {
+                requestAnimationFrame(animateHeroWave);
+                return;
+            }
             const time = Date.now() / 300;
             const isActive = (Math.sin(time / 4) > 0.5); // "Active" state every 6s back and forth
             bars.forEach((bar, i) => {
@@ -562,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
             menuToggle.click();
         }
         modal.style.display = 'flex';
+        document.body.classList.add('modal-active'); // Add class for potential CSS-based cursor fallback
         gsap.fromTo(modal, { opacity: 0 }, { opacity: 1, duration: 0.4 });
         gsap.fromTo(modal.querySelector('.modal-panel'), { y: 28, scale: 0.96 }, { y: 0, scale: 1, duration: 0.4, ease: "reveal" });
         if (lenis) lenis.stop();
@@ -571,6 +584,7 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 
     function closeModal() {
+        document.body.classList.remove('modal-active');
         gsap.to(modal, { opacity: 0, duration: 0.3, onComplete: () => { modal.style.display = 'none'; } });
         if (lenis) lenis.start();
         setTimeout(() => { form.style.display = 'block'; success.style.display = 'none'; form.reset(); }, 400);
@@ -606,27 +620,24 @@ document.addEventListener('DOMContentLoaded', () => {
             };
 
             try {
-                // Determine API host (use current hostname if not localhost)
-                const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-                const apiHost = isLocal ? 'localhost' : window.location.hostname;
-                
-                const response = await fetch(`http://${apiHost}:3000/send-email`, {
+                const response = await fetch("https://formcarry.com/s/gmbjg_7gzih", {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Accept": "application/json",
+                        "Content-Type": "application/json"
                     },
                     body: JSON.stringify(data),
                 });
 
                 const result = await response.json();
 
-                if (result.success) {
+                if (response.ok) {
                     form.classList.remove('is-loading');
                     form.style.display = 'none';
                     success.style.display = 'block';
                     showToast('Request sent successfully!');
                 } else {
-                    throw new Error(result.error || 'Failed to send email');
+                    throw new Error(result.message || 'Failed to send request');
                 }
             } catch (error) {
                 console.error('Submission error:', error);

@@ -216,6 +216,7 @@ section {
   z-index: 100002;
   mix-blend-mode: multiply;
   transform: translate(-50%, -50%);
+  will-change: transform;
 }
 
 .cursor-ring {
@@ -233,6 +234,7 @@ section {
   align-items: center;
   justify-content: center;
   transition: width 0.3s var(--ease-spring), height 0.3s var(--ease-spring), background 0.3s, border-color 0.3s;
+  will-change: transform, width, height;
 }
 
 .cursor-ring .cursor-text {
@@ -252,6 +254,17 @@ body.dark-cursor .cursor-dot {
 body.dark-cursor .cursor-ring {
   border-color: #FFFFFF !important;
   mix-blend-mode: difference !important;
+}
+
+/* Fallback to system cursor when modal is active for maximum smoothness */
+body.modal-active,
+body.modal-active * {
+  cursor: auto !important;
+}
+
+body.modal-active .cursor-dot,
+body.modal-active .cursor-ring {
+  display: none !important;
 }
 
 /* 6. Buttons & CTAs */
@@ -809,6 +822,11 @@ nav {
   transition: opacity 0.4s ease, transform 0.4s ease;
 }
 
+.modal-panel:hover {
+  border-color: rgba(200, 68, 26, 0.2);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.12);
+}
+
 /* Modal v7.1 */
 .form-field {
   margin-bottom: 22px;
@@ -1061,6 +1079,7 @@ nav {
   .modal-panel {
     padding: 32px 24px;
     width: 95%;
+    will-change: transform;
   }
 
   .cursor-dot,
