@@ -7,9 +7,9 @@ const PORT = 3000;
 // Replace these with your actual SMTP credentials
 const SMTP_HOST = 'smtp.gmail.com';
 const SMTP_PORT = 587;
-const SMTP_USER = process.env.EMAIL || 'contact@integrixai.me';
+const SMTP_USER = process.env.EMAIL || 'integrixai.in@gmail.com';
 const SMTP_PASS = (process.env.GMAIL || '').replace(/\s/g, '');
-const FROM_EMAIL = 'contact@integrixai.me';
+const FROM_EMAIL = 'integrixai.in@gmail.com';
 
 console.log('Environment Debug:', {
   auth_user: SMTP_USER,

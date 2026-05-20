@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('mousemove', (e) => {
             mouseX = e.clientX;
             mouseY = e.clientY;
-            
+
             // Use translate3d for better performance
             dot.style.transform = `translate3d(${mouseX - 5}px, ${mouseY - 5}px, 0)`;
 
@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             ringX += (mouseX - ringX) * LERP;
             ringY += (mouseY - ringY) * LERP;
-            
+
             // Use translate3d for better performance
             ring.style.transform = `translate3d(${ringX - 22}px, ${ringY - 22}px, 0)`;
             requestAnimationFrame(animateRing);
@@ -521,44 +521,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Mobile Menu Logic
     if (menuToggle && mobileMenu) {
-    const toggleMenu = (forceClose = false) => {
-        if (!menuToggle || !mobileMenu) return;
+        const toggleMenu = (forceClose = false) => {
+            if (!menuToggle || !mobileMenu) return;
 
-        const isActive = forceClose ? false : menuToggle.classList.toggle('active');
-        if (forceClose) menuToggle.classList.remove('active');
+            const isActive = forceClose ? false : menuToggle.classList.toggle('active');
+            if (forceClose) menuToggle.classList.remove('active');
 
-        document.body.style.overflow = isActive ? 'hidden' : '';
-        if (lenis) isActive ? lenis.stop() : lenis.start();
+            document.body.style.overflow = isActive ? 'hidden' : '';
+            if (lenis) isActive ? lenis.stop() : lenis.start();
 
-        if (isActive) {
-            // Open: Fade + Slight Slide Up
-            gsap.set(mobileMenu, { display: 'flex', opacity: 0, y: 30 });
-            gsap.to(mobileMenu, {
-                opacity: 1,
-                y: 0,
-                duration: 0.4,
-                ease: "power2.out"
-            });
-            gsap.from('.mobile-link', {
-                y: 20,
-                opacity: 0,
-                stagger: 0.05,
-                duration: 0.4,
-                delay: 0.1
-            });
-        } else {
-            // Close: Fade Out
-            gsap.to(mobileMenu, {
-                opacity: 0,
-                y: 30,
-                duration: 0.3,
-                ease: "power2.in",
-                onComplete: () => {
-                    gsap.set(mobileMenu, { display: 'none' });
-                }
-            });
-        }
-    };
+            if (isActive) {
+                // Open: Fade + Slight Slide Up
+                gsap.set(mobileMenu, { display: 'flex', opacity: 0, y: 30 });
+                gsap.to(mobileMenu, {
+                    opacity: 1,
+                    y: 0,
+                    duration: 0.4,
+                    ease: "power2.out"
+                });
+                gsap.from('.mobile-link', {
+                    y: 20,
+                    opacity: 0,
+                    stagger: 0.05,
+                    duration: 0.4,
+                    delay: 0.1
+                });
+            } else {
+                // Close: Fade Out
+                gsap.to(mobileMenu, {
+                    opacity: 0,
+                    y: 30,
+                    duration: 0.3,
+                    ease: "power2.in",
+                    onComplete: () => {
+                        gsap.set(mobileMenu, { display: 'none' });
+                    }
+                });
+            }
+        };
 
         menuToggle.addEventListener('click', () => toggleMenu());
         if (menuCloseBtn) menuCloseBtn.addEventListener('click', () => toggleMenu(true));
@@ -610,7 +610,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             if (form.classList.contains('is-loading')) return; // Prevent double submission
-            
+
             form.classList.add('is-loading');
 
             const formData = new FormData(form);
